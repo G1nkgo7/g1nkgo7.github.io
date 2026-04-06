@@ -650,7 +650,7 @@ mjx-container[display="true"] + br {
         <div class="label text-third-text-color text-sm">Tags</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
         <div class="label text-third-text-color text-sm">Categories</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
@@ -748,7 +748,7 @@ mjx-container[display="true"] + br {
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.5k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.4k Words</span>
         </span>
     
     
@@ -775,37 +775,32 @@ mjx-container[display="true"] + br {
 			<blockquote>
 <p>“为你，千千万万遍。”</p>
 </blockquote>
-<h4 id="问题引入"><a href="#问题引入" class="headerlink" title="问题引入"></a>问题引入</h4><p>subtitle:    “&quot;For you, a thousand times over.&quot;“<br>date:        2022-09-19  19:00:00<br>author:      “Gingko”<br>header-img:  “images&#x2F;cover&#x2F;2022-09-19-Java随笔(1).jpg”</p>
+<h4 id="问题引入"><a href="#问题引入" class="headerlink" title="问题引入"></a>问题引入</h4><p>subtitle:    “"For you, a thousand times over."“<br>date:        2022-09-19  19:00:00<br>author:      “Gingko”<br>header-img:  “images/cover/2022-09-19-Java随笔(1).jpg”</p>
 <p>今天学习 Java 时，老师突然提了一个问题：<code>&lt;br&gt;</code></p>
 <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println( <span class="number">0.1</span> + <span class="number">0.2</span> )</span><br></pre></td></tr></table></figure></div>
 
 <p>在 Java 中，上述表达式输出的值应该是多少？<code>&lt;br&gt;</code><br>这事出反常必有反常呀，要是问题这么简单又怎么会提这么简单的问题呢？<code>&lt;br&gt;</code><br>我便立马掏出了我的 <strong>VScode</strong>，用最快的速度码好了如下代码：</p>
-<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(<span class="number">0.1</span> + <span class="number">0.2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">test</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        System.out.println(<span class="number">0.1</span> + <span class="number">0.2</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
 
 <p>然后编译器便得出了结论：<strong>0.30000000000000004</strong> <code>&lt;br&gt;</code><br>我一数，好家伙，小数点后竟足足有 17 位，这个答案虽然有点意外，但似乎也在意料之中。</p>
 <p>那，到底是什么原因导致了这种情况呢？<code>&lt;br&gt;</code><br>在我 <strong>Google一下</strong> 并研究了好一阵子后，大概也是明白了一些，<code>&lt;br&gt;</code><br>而且，似乎很多前辈们都曾在面试的时候折戟于这道看上去很 <strong>“简单”</strong> 的题目……</p>
 <h4 id="原理解释"><a href="#原理解释" class="headerlink" title="原理解释"></a>原理解释</h4><p>首先，我们都知道，计算机是以二进制的形式进行存储的，数值也不例外。<code>&lt;br&gt;</code><br>Java 是采用 <strong>IEEE754 标准</strong> ，来实现浮点数的表达、运算和存储的。</p>
-<p>那就 0.1 而言，他的本质是 1 &#x2F; 10 ，用二进制表示的话，就是 1 &#x2F; 1010，然鹅，问题就出现了，你会惊奇的发现，在二进制下，这个数是 <strong>除不尽的，是一个无穷循环。</strong></p>
+<p>那就 0.1 而言，他的本质是 1 / 10 ，用二进制表示的话，就是 1 / 1010，然鹅，问题就出现了，你会惊奇的发现，在二进制下，这个数是 <strong>除不尽的，是一个无穷循环。</strong></p>
 <p>计算结果为：<strong>0.0 001100110011001100110011… （0011无限循环）</strong><code>&lt;br&gt;</code><br>采用二进制下的科学计数法表示，则为：<strong>1.100110011001100110011… × 2 <code>&lt;sup&gt;</code>-4 <code>&lt;/sup&gt;</code></strong></p>
 <p>下面是 <strong>IEEE754 标准下 double 类型的计算公式和图示</strong> <code>&lt;br&gt;</code></p>
 <div>
      <p align="center"><b>(-1)<sup>s</sup> * 2<sup>(e - 1023)</sup> * f</b></p>
-     <img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/images/include/2022-09-19-Java随笔(1).png"
-                      width="100%" 
-                >
+     <img lazyload="" src="/images/loading.svg" data-src="/images/include/2022-09-19-Java随笔(1).png" width="100%">
      <small class="img-hint"> IEEE754标准</small>
 </div>
 
-<p>由上述科学计数法我们可以得到 <strong>exponent</strong> 的值为 -4，<code>&lt;br&gt;</code><br>所以，我们 e 的取值 为 1019 （1019 -1023 &#x3D; -4），<code>&lt;br&gt;</code><br>1019 用 11 位二进制的表示为 <strong>0111 11111 011</strong>，</p>
+<p>由上述科学计数法我们可以得到 <strong>exponent</strong> 的值为 -4，<code>&lt;br&gt;</code><br>所以，我们 e 的取值 为 1019 （1019 -1023 = -4），<code>&lt;br&gt;</code><br>1019 用 11 位二进制的表示为 <strong>0111 11111 011</strong>，</p>
 <p>尾数部分为 <strong>1.1 0011 0011 0011 ……</strong> ，隐 1 后存入 <strong>fraction</strong> 部分， <code>&lt;br&gt;</code><br>因为 0.1 为正数，所以符号位 <strong>sign</strong> 取值为 0，<code>&lt;br&gt;</code><br>则 0.1 在 IEEE754 双精度标准下的二进制存储格式如下：</p>
 <p><strong>0 0111 1111 011 1001 1001 1001 ……（52位 1001 循环）</strong></p>
-<p>用该二进制形式逆推回十进制，首先计算 <strong>fraction</strong> 部分，观察规律不难发现，<code>&lt;br&gt;</code><br><strong>f &#x3D; 1 &#x2F; 2 <code>&lt;sup&gt;</code>n <code>&lt;/sup&gt;</code>     (n &#x3D; 1 + 4K, 4 + 4k, k&#x3D; 0,1,2,3……)</strong><code>&lt;br&gt;</code><br><strong>即 1&#x2F;2 + 1&#x2F;16 + 1&#x2F;32 + …… + 1&#x2F;65536 + 1&#x2F;131075 + ……</strong></p>
+<p>用该二进制形式逆推回十进制，首先计算 <strong>fraction</strong> 部分，观察规律不难发现，<code>&lt;br&gt;</code><br><strong>f = 1 / 2 <code>&lt;sup&gt;</code>n <code>&lt;/sup&gt;</code>     (n = 1 + 4K, 4 + 4k, k= 0,1,2,3……)</strong><code>&lt;br&gt;</code><br><strong>即 1/2 + 1/16 + 1/32 + …… + 1/65536 + 1/131075 + ……</strong></p>
 <p>最后计算出的值约为 0.6，再加上前面所隐藏的 1 ，可以得到 f 约为 1.6，再乘以 2 <code>&lt;sup&gt;</code>-4 <code>&lt;/sup&gt;</code>，得出结果大约为 0.1，但 f 的 1.6 毕竟是约值，由于尾数位数有限，真实值可求，可得真实计算值为：</p>
 <p><strong>0.10000000000000000555111512312578270211815834045410156</strong></p>
-<p>简单总结，是由于 1&#x2F;10 无法用有限位数的二进制数进行表示，导致在 IEEE574 标准下存储时，存在数据割舍遗弃问题，最终造成精度损失。</p>
+<p>简单总结，是由于 1/10 无法用有限位数的二进制数进行表示，导致在 IEEE574 标准下存储时，存在数据割舍遗弃问题，最终造成精度损失。</p>
 <h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h4><p>那同学们可能就很疑惑，你看，这 0.1 的精度损失也太小了吧，而且不会对计算产生很大影响，我大不了下次比较的时候限制一下位数，让他四舍五入，舍弃掉后面的误差值不就好了。</p>
 <p>在我们平日简单的计算过程中，确实不必处心积虑的来考虑这精度问题，但对于某些特别的场景，这种精度问题就必须要考虑了，举个例子来说，如果我们大量使用 double 来进行金钱的计算，只要数额够大，那我们 double 所损失的精度最终就会转换为白花花的 Money。</p>
 <p>那么，我们该如何解决这个问题呢？</p>
@@ -827,13 +822,13 @@ mjx-container[display="true"] + br {
 <p>可以看到，虽然精度略有提高，但运算结果还不是完全精确，那同学们可能就会有疑问了，难道这 BigDecimal 也不能完全精确吗？</p>
 <p>非也，非也，这里就是要强调的一个大坑了，<strong>在进行浮点数运算时，使用 BigDecimal 表示和计算浮点数，且务必使用字符串的构造方法来初始化 BigDecimal 类型的变量！</strong></p>
 <p>所以正确的表达式应该如下：</p>
-<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.1&quot;</span>).add(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.2&quot;</span>)));</span><br></pre></td></tr></table></figure></div>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">"0.1"</span>).add(<span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">"0.2"</span>)));</span><br></pre></td></tr></table></figure></div>
 
-<p>在修正过后，我们终于可以说 <strong>0.1 + 0.2 &#x3D;&#x3D; 0.3</strong> 了。</p>
+<p>在修正过后，我们终于可以说 <strong>0.1 + 0.2 == 0.3</strong> 了。</p>
 <h4 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h4><ul>
-<li><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/359597906" >知乎_码邦主(https://zhuanlan.zhihu.com/p/359597906)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
-<li><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/340407036" >知乎_程序员小王(https://zhuanlan.zhihu.com/p/340407036)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
-<li><a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33327680/article/details/94462435" >CSDN_书海无涯行做舟(https://blog.csdn.net/qq_33327680&#x2F;article&#x2F;details&#x2F;94462435)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><a class="link" target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/359597906">知乎_码邦主(https://zhuanlan.zhihu.com/p/359597906)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><a class="link" target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/340407036">知乎_程序员小王(https://zhuanlan.zhihu.com/p/340407036)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li><a class="link" target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33327680/article/details/94462435">CSDN_书海无涯行做舟(https://blog.csdn.net/qq_33327680/article/details/94462435)<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
 </ul>
 
 		</div>
@@ -1025,7 +1020,7 @@ mjx-container[display="true"] + br {
                     </span>
                     
                         <span>
-                            8.3k words in total
+                            9.4k words in total
                         </span>
                     
                 </p>
