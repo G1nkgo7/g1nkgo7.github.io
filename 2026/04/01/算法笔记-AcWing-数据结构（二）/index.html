@@ -78,20 +78,25 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/archives/2022/06/"/>
+    <link rel="canonical" href="http://example.com/2026/04/01/算法笔记-acwing-数据结构（二）/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
     
         
-        <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/archives/2022/06/index.html">
+        <meta name="description" content="Trie 树 （前缀树、字典树）用来快速的存储和查找字符串 集合的数据结构 12345678910111213141516171819202122232425vector&lt;vector&lt;int&gt;&gt; son(n,vector&lt;int&gt;(26,0));vector&lt;int&gt; cnt(n);int idx; &#x2F;&#x2F; 下标是0的点，即是根节点又是空节点void">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法笔记：AcWing-数据结构（二）">
+<meta property="og:url" content="http://example.com/2026/04/01/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Trie 树 （前缀树、字典树）用来快速的存储和查找字符串 集合的数据结构 12345678910111213141516171819202122232425vector&lt;vector&lt;int&gt;&gt; son(n,vector&lt;int&gt;(26,0));vector&lt;int&gt; cnt(n);int idx; &#x2F;&#x2F; 下标是0的点，即是根节点又是空节点void">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-03-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-08T08:01:42.952Z">
 <meta property="article:author" content="John Doe">
+<meta property="article:tag" content="algorithm">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
     
@@ -105,7 +110,7 @@
     
     <title>
         
-            Archive: 2022/6 | Ginkgo&#39;s Blog
+            算法笔记：AcWing-数据结构（二） | Ginkgo&#39;s Blog
         
     </title>
 
@@ -521,7 +526,7 @@ mjx-container[display="true"] + br {
 
                             <li class="navbar-item">
                                 <!-- Menu -->
-                                <a class="active"
+                                <a class=""
                                    href="/archives"
                                         >
                                     <i class="fa-solid fa-archive fa-fw"></i>
@@ -599,7 +604,7 @@ mjx-container[display="true"] + br {
 
                     <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
                         
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
                            href="/archives"
                         >
                             <span>
@@ -666,148 +671,407 @@ mjx-container[display="true"] + br {
 			
 
 			<div class="main-content">
-				<div class="archive-container shadow-none hover:shadow-none sm:shadow-redefine sm:hover:shadow-redefine-hover">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			
+			
+			<img src="https://evan.beee.top/img/2023/01/21/5966cf4d2f2c05aecad54e233d9562ff.png" alt="算法笔记：AcWing-数据结构（二）" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75" />
+			
+			<div class="w-full flex items-center absolute bottom-0 justify-start">
+				<h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">算法笔记：AcWing-数据结构（二）</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/avatar.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">Ginkgo</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">True love prevails.</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-04-01</span>
+        <span class="mobile">2026-04-01</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-04-08 16:01:42</span>
+            <span class="mobile">2026-04-08 16:01:42</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/">算法笔记</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/algorithm/">algorithm</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.6k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>7 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h3 id="Trie-树-（前缀树、字典树）"><a href="#Trie-树-（前缀树、字典树）" class="headerlink" title="Trie 树 （前缀树、字典树）"></a>Trie 树 （前缀树、字典树）</h3><p>用来快速的存储和查找字符串 集合的数据结构</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">son</span>(n,<span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(<span class="number">26</span>,<span class="number">0</span>));</span><br><span class="line"><span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">cnt</span><span class="params">(n)</span></span>;</span><br><span class="line"><span class="type">int</span> idx; <span class="comment">// 下标是0的点，即是根节点又是空节点</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">inset</span><span class="params">(string str)</span></span>{</span><br><span class="line">    <span class="type">int</span> p = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; str[i];++i){</span><br><span class="line">        <span class="type">int</span> u = str[i] -<span class="string">'a'</span>;</span><br><span class="line">        <span class="keyword">if</span>(!son[p][u])son[p][u] = ++idx;</span><br><span class="line">        p = son[p][u];</span><br><span class="line">    }</span><br><span class="line">    cnt[p]++;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">query</span><span class="params">(string str)</span></span>{</span><br><span class="line">    <span class="type">int</span> p = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i =<span class="number">0</span> ;str[i];++i){</span><br><span class="line">        <span class="type">int</span> u = str[i] - <span class="string">'a'</span>;</span><br><span class="line">        <span class="keyword">if</span>(!son[p][u]) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        p = son[p][u];</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> cnt[p];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+
+<div style="padding: 10px 0;">
+<style>
+.tn{width:28px;height:28px;border:2px solid #000;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin:0 12px;background:#fff}.te{background:#f44;color:#fff;border-color:#c33}
+</style>
+<div style="text-align:center">
+  <div class="tn">r</div>
+  <div style="height:10px"></div>
+  <div>
+    <span class="tn">a</span>
+    <span class="tn">b</span>
+    <span class="tn">c</span>
+  </div>
+  <div style="height:10px"></div>
+  <div>
+    <span class="tn te">b</span>
+    <span class="tn">c</span>
+    <span class="tn">d</span>
+  </div>
+</div>
+<div style="font-size:12px;color:#666;margin-top:8px">
+r=root，红色=单词结束
+</div>
+</div>
+
+<p>示意图</p>
+<p> 01 字典树求最大异或对<br>从高到低插入二进制<br>从高到低贪心选相反位</p>
+<p>数字：1, 2, 3二进制（从高位到低位，只画 3 位方便看）：<br>1 → 0 0 1<br>2 → 0 1 0<br>3 → 0 1 1<br>我们要找 a ^ b 最大。<br>1️⃣ 插入 1 → 001<br>plaintext<br>        root<br>         |<br>         0   （第2位）<br>         |<br>         0   （第1位）<br>         |<br>         1   （第0位）<br>2️⃣ 拿 2 → 010 去树上查询<br>目标：每一位尽量走相反的位<br>第 2 位：0 → 想走 1<br>树里只有 0 → 只能走 0<br>第 1 位：1 → 想走 0<br>树里是 0 → 走！这一位异或为 1<br>第 0 位：0 → 想走 1<br>树里是 1 → 走！这一位异或为 1<br>得到异或结果：第 1 位 = 1，第 0 位 = 1 → 011 = 3当前最大值 = 3<br>然后把 2 插入树：<br>plaintext<br>        root<br>         |<br>         0<br>       /   <br>      0     1<br>      |     |<br>      1     0<br>3️⃣ 再拿 3 → 011 查询<br>第 2 位：0 → 只能走 0<br>第 1 位：1 → 想走 0<br>有 0 → 异或该位 = 1<br>第 0 位：1 → 想走 0<br>有 0 → 异或该位 = 1<br>结果依然是 011 = 3<br>插入 3 后树：<br>plaintext<br>        root<br>         |<br>         0<br>       /   <br>      0     1<br>      |    / <br>      1   0   1<br>4️⃣ 最终最大异或就是<br>3<br>核心原理（一句话）<br>异或最大 = 高位尽量不同01 Trie 就是帮你：对每一位，贪心选相反的路，能走就走，不能走再妥协。<br>再给你一张极简 HTML 版可插入 MD 的图<br>html<br>预览</p>
+<div style="font-family: monospace; padding:10px; font-size:14px">
+<b>Trie 求最大异或演示</b>
+<pre>
+        root
+         |
+         0
+       /   \
+      0     1   ← 高位不同，异或=1
+      |    / \
+      1   0   1
+         ↑   ↑
+相反位=1  └───┘
+</pre>
+<p>红色路径 = 贪心选反位 → 得到最大异或 11 = 3</p>
+</div>
+
+<p>void solve() {<br>    int n = next<int>(), idx = 0;<br>    int son[100000 * 32 + 10][2];</int></p>
+<pre><code>auto insert = [&amp;](int x) {
+    int p = 0;
+    for (int i = 31; i &gt;= 0; --i) {
+        int c = (x &gt;&gt; i) &amp; 1;
+        if (!son[p][c])
+            son[p][c] = ++idx;
+        p = son[p][c];
+    }
+};
+auto query = [&amp;](int x) {
+    int p = 0, res = 0;
+    for (int i = 31; i &gt;= 0; --i) {
+        int c = (x &gt;&gt; i) &amp; 1;
+        int rev = 1 - c;
+        if (son[p][rev]) {
+            res |= (1 &lt;&lt; i);
+            p = son[p][rev];
+        } else
+            p = son[p][c];
+    }
+    return res;
+};
+
+int ans = 0;
+insert(next&lt;int&gt;());
+for (int i = 1; i &lt; n ; ++i) {
+    int x = next&lt;int&gt;();
+    ans = max(ans, query(x));
+    insert(x);
+}
+cout &lt;&lt; ans;
+</code></pre>
+<p>}</p>
+<p>很操蛋的一点<br>vector 会爆内存，换成数组就好了 T^T</p>
+<h3 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h3><p>朴素并查集<br>维护集合里面每个数量的</p>
+<p>记录偏移量</p>
+<p>作用：</p>
+<ol>
+<li>将两个集合合并</li>
+<li>询问两个元素是否在一个集合当中</li>
+</ol>
+<p>基本原理：<br>用树的形式来维护所有集合<br>每一个集合的编号 是 它的根节点 的编号<br>每一个点x存储它的 fa[x] 父节点是谁</p>
+<p>问题1 ：如何判断树根 if(fa[x] == x);<br>问题2 ： 如何求 x 的集合编号 while(fa[x]!=x) x= fa[x];<br>// 路径压缩 找到 x_root 后 fa[x] = x_root 直接指向根节点</p>
+<p>// 按秩合并，一般不用 LLm 帮我简单补充下<br>按秩合并（把矮树挂到高树下面）之所以有效，是因为它能严格控制树的高度不会快速增长，从而保证 find 操作接近 O (1)。<br>不按秩会怎样？<br>如果随便合并，比如永远把 A 挂到 B 下面，树会退化成一条链表：<br>高度 = 节点数<br>find 变成 O (n)，并查集就废了</p>
+<p>问题3：如何合并两个集合 fa[x_root] = y_root</p>
+<p>代码实现</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">DSU</span> {</span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; fa, sz;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">DSU</span>(<span class="type">int</span> n) {</span><br><span class="line">        fa.<span class="built_in">resize</span>(n + <span class="number">1</span>);</span><br><span class="line">        sz.<span class="built_in">resize</span>(n + <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">iota</span>(fa.<span class="built_in">begin</span>(), fa.<span class="built_in">end</span>(), <span class="number">0</span>); <span class="comment">// 一开始认为每个 点 是单独的 集合</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">find</span><span class="params">(<span class="type">int</span> x)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> x == fa[x] ? x : fa[x] = <span class="built_in">find</span>(fa[x]);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">unite</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>{ </span><br><span class="line">        x = <span class="built_in">find</span>(x), y = <span class="built_in">find</span>(y);</span><br><span class="line">        <span class="keyword">if</span> (x == y) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span> (sz[x] &lt; sz[y]) <span class="built_in">swap</span>(x, y); <span class="comment">//  小的加到大的里 ，按秩合并的一种理解（其实应该是矮的加到高的）</span></span><br><span class="line">        fa[y] = x;</span><br><span class="line">        sz[x] += sz[y]; </span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">same</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">find</span>(x) == <span class="built_in">find</span>(y);</span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></table></figure></div>
+
+
+<p>如何维护额外信息？<br>看上述 sz</p>
+<p>食物链 样题<br>额外信息：维护每个点到根节点的距离<br>如何维护？LLm帮我补充下，可以给出简单代码</p>
+<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><ol>
+<li>维护一个数据集合</li>
+<li>插入一个数</li>
+<li>求集合中的最小值</li>
+<li>删除最小值<br>这是小根堆（每一个点小于等于左右儿子 ）<br>手写堆可以支持的额外操作<br>5.删除任一一个元素</li>
+<li>修改任一一个元素<br>（STL 不能直接实现，但也可以简介实现）</li>
+</ol>
+<p>数据结构 ：完全二叉树 </p>
+<p>手写： (支持修改和删除 任一元素)<br>一维数组来存：（有点像树状数组咯）<br>x 的左儿子 2x<br>右儿子 2x+1</p>
+<p>堆的操作： 复杂度是 logn 的<br>down(x){ // 往下调整 ，如果把一个数变大了，往下移</p>
+<p>}<br>up(x){ // 往上调整，如果一个数变小了，往上移</p>
+<p>}<br>// 添加，加到尾巴<br>heap[++size] = x;<br>up()</p>
+<p>// 删除堆顶<br>heap[1] = heap[size]<br>size–;<br>down(size);</p>
+<p>用尾节点覆盖 堆顶节点<br>删除尾节点<br>down 调整 堆顶</p>
+<p>// 删除仍一元素，与堆顶类似<br>heap[k] = heap[size] size –<br>down(k); |  up(k);</p>
+<p>// 修改<br>heap[k] = x;<br>down(k) up(k);</p>
+<p>// 下标从 1 开始，方便 左右儿子</p>
+<p>init 初始化</p>
+<p>for(int i = 1;i&lt;=n;++i)  cin&gt;&gt;h[i];</p>
+<p>for(int i = n/2;i;i–) down(i); // 就是最后一层不需要 down 了,树的性质</p>
+<p>从 2/n 开始 往下 down</p>
+<p>// 堆排序</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">heap_swap</span><span class="params">(<span class="type">int</span> a ,<span class="type">int</span> b)</span></span>{</span><br><span class="line">    <span class="built_in">swap</span>(ph[hp[a]],ph[hp[b]]);</span><br><span class="line">    <span class="built_in">swap</span>(hp[a],hp[b]);</span><br><span class="line">    <span class="built_in">swap</span>(h[a],h[b])</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">down</span><span class="params">(<span class="type">int</span> u )</span></span>{</span><br><span class="line">    <span class="type">int</span> t = u;</span><br><span class="line">    <span class="keyword">if</span>(u*<span class="number">2</span> &lt;=size &amp;&amp; h[u*<span class="number">2</span>]&lt;h[t]) t=u*<span class="number">2</span>; <span class="comment">// 左儿子</span></span><br><span class="line">    <span class="keyword">if</span>(u*<span class="number">2</span> <span class="number">+1</span> &lt;=size &amp;&amp; h[u*<span class="number">2</span><span class="number">+1</span>]&lt;h[t]) t=u*<span class="number">2</span><span class="number">+1</span>; <span class="comment">// 右儿子</span></span><br><span class="line">    <span class="keyword">if</span>(u!=t){</span><br><span class="line">        <span class="built_in">swap</span>(h[u],h[t]); <span class="comment">// 替换为 heap_swap</span></span><br><span class="line">        <span class="built_in">down</span>(t);</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">} </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">up</span><span class="params">(<span class="type">int</span> u)</span></span>{</span><br><span class="line">    <span class="keyword">while</span>(u / <span class="number">2</span> &amp;&amp; h[u / <span class="number">2</span>] &gt; h[u]){ <span class="comment">// 往上换就行</span></span><br><span class="line">        <span class="built_in">swap</span>(h[u/<span class="number">2</span>],h[u]); <span class="comment">// heap_swap</span></span><br><span class="line">        u/=<span class="number">2</span></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>STL 实现<br>优先队列</p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 算法笔记：AcWing-数据结构（二）</li>
+        <li><strong>Author:</strong> Ginkgo</li>
+        <li><strong>Created at
+                :</strong> 2026-04-01 00:00:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2026-04-08 16:01:42
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://g1nkgo7.github.io/2026/04/01/算法笔记-AcWing-数据结构（二）/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/algorithm/">#algorithm</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2026/04/05/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">算法笔记：AcWing-基础算法</span>
+						<span class="post-nav-item">Prev posts</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2024/04/21/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-%E9%80%86%E5%85%83/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">算法笔记：乘法逆元</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="gitalk-container"></div>
+    <script data-swup-reload-script
+            src="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js"></script>
+    <script data-swup-reload-script>
+        (function() {
+            const startPath = location.pathname;
+            const startTime = Date.now();
+            const retryDelay = 200;
+            const retryLimit = 5000;
+
+            const runGitalk = () => {
+                if (location.pathname !== startPath) {
+                    return;
+                }
+
+                const container = document.getElementById('gitalk-container');
+                if (!container || typeof Gitalk === 'undefined') {
+                    if (Date.now() - startTime < retryLimit) {
+                        setTimeout(runGitalk, retryDelay);
+                    }
+                    return;
+                }
+
+                container.innerHTML = '';
+
+                let pageKey = decodeURI(location.pathname);
+                const maxLength = 50;
+                if (pageKey.length > maxLength) {
+                    pageKey = pageKey.substring(0, maxLength - 3) + '...';
+                }
+
+                try {
+                    new Gitalk({
+                        clientID: 'Ov23liQqIUZL7VlfwyIl',
+                        clientSecret: 'd5280a064abda06200c1597ac2085b2b6c9d35ff',
+                        repo: 'Gitalk',
+                        owner: 'G1nkgo7',
+                        admin: ['G1nkgo7'],
+                        id: pageKey,
+                        language: 'en',
+                        proxy: 'https://cors-server-ecru.vercel.app/github_access_token'
+                    }).render(container);
+                } catch (e) {
+                    window.Gitalk = null;
+                }
+            };
+
+            runGitalk();
+        })();
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
 	
-<div class="archive-list-container">
-    
-        <section class="archive-item mb-spacing-unit last:mb-0">
-            <div class="archive-item-header flex flex-row items-center mb-2">
-                <span class="archive-year font-semibold text-3xl mr-2">2026</span>
-                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">3</span>
-            </div>
-            
-            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
-                
-                    
-                    
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='04-06'>
-                    
-                    <a href="/2026/04/06/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%88%E4%B8%80%EF%BC%89/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">算法笔记：AcWing-数据结构（一）</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='04-05'>
-                    
-                    <a href="/2026/04/05/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">算法笔记：AcWing-基础算法</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='04-01'>
-                    
-                    <a href="/2026/04/01/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%88%E4%BA%8C%EF%BC%89/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">算法笔记：AcWing-数据结构（二）</span>
-                    </a>
-                    
-                
-                </li> <!-- Ensure the last item is properly closed -->
-            </ul>
-        </section>
-    
-        <section class="archive-item mb-spacing-unit last:mb-0">
-            <div class="archive-item-header flex flex-row items-center mb-2">
-                <span class="archive-year font-semibold text-3xl mr-2">2024</span>
-                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">1</span>
-            </div>
-            
-            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
-                
-                    
-                    
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='04-21'>
-                    
-                    <a href="/2024/04/21/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-%E9%80%86%E5%85%83/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">算法笔记：乘法逆元</span>
-                    </a>
-                    
-                
-                </li> <!-- Ensure the last item is properly closed -->
-            </ul>
-        </section>
-    
-        <section class="archive-item mb-spacing-unit last:mb-0">
-            <div class="archive-item-header flex flex-row items-center mb-2">
-                <span class="archive-year font-semibold text-3xl mr-2">2023</span>
-                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">1</span>
-            </div>
-            
-            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
-                
-                    
-                    
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='01-31'>
-                    
-                    <a href="/2023/01/31/2023-01-31-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(1)/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">机器学习笔记(1)</span>
-                    </a>
-                    
-                
-                </li> <!-- Ensure the last item is properly closed -->
-            </ul>
-        </section>
-    
-        <section class="archive-item mb-spacing-unit last:mb-0">
-            <div class="archive-item-header flex flex-row items-center mb-2">
-                <span class="archive-year font-semibold text-3xl mr-2">2022</span>
-                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">3</span>
-            </div>
-            
-            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
-                
-                    
-                    
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='09-19'>
-                    
-                    <a href="/2022/09/19/Java%E9%9A%8F%E7%AC%94-%E6%B5%AE%E7%82%B9%E6%95%B0%E7%B2%BE%E5%BA%A6/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">Java随笔：0.1 + 0.2 != 0.3 ?</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='08-26'>
-                    
-                    <a href="/2022/08/26/Java%E9%9A%8F%E7%AC%94-%E7%BB%86%E8%83%9E%E8%87%AA%E5%8A%A8%E6%9C%BA/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">Java随笔：细胞自动机</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='06-26'>
-                    
-                    <a href="/2022/06/26/Hello-2022/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">Hello 2022</span>
-                    </a>
-                    
-                
-                </li> <!-- Ensure the last item is properly closed -->
-            </ul>
-        </section>
-    
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">算法笔记：AcWing-数据结构（二）</div>
+		<ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Trie-%E6%A0%91-%EF%BC%88%E5%89%8D%E7%BC%80%E6%A0%91%E3%80%81%E5%AD%97%E5%85%B8%E6%A0%91%EF%BC%89"><span class="nav-text">Trie 树 （前缀树、字典树）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B6%E6%9F%A5%E9%9B%86"><span class="nav-text">并查集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A0%86"><span class="nav-text">堆</span></a></li></ol>
+
+	</div>
 </div>
+	</div>
+	
 </div>
+
 			</div>
 
 			
@@ -900,6 +1164,26 @@ mjx-container[display="true"] + br {
 		</div>
 	</div>
 
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
 	
 
 	<div class="right-side-tools-container">
@@ -1045,6 +1329,7 @@ mjx-container[display="true"] + br {
         }),
     );
 </script>
+
 
 
 
