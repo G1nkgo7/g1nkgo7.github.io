@@ -78,23 +78,21 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/2026/04/08/算法笔记-acwing-数据结构（二）/"/>
+    <link rel="canonical" href="http://example.com/2026/04/09/算法笔记-acwing-搜索与图论/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
     
         
-        <meta name="description" content="Trie、并查集与堆的核心思想、常见模板与易错点整理">
-<meta property="og:type" content="article">
-<meta property="og:title" content="算法笔记：AcWing-数据结构（二）">
-<meta property="og:url" content="http://example.com/2026/04/08/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+        <meta property="og:type" content="article">
+<meta property="og:title" content="算法笔记：AcWing">
+<meta property="og:url" content="http://example.com/2026/04/09/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E6%90%9C%E7%B4%A2%E4%B8%8E%E5%9B%BE%E8%AE%BA/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Trie、并查集与堆的核心思想、常见模板与易错点整理">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/images/redefine-og.webp">
-<meta property="article:published_time" content="2026-04-08T06:30:00.000Z">
-<meta property="article:modified_time" content="2026-04-08T09:34:42.392Z">
+<meta property="article:published_time" content="2026-04-09T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-09T03:18:15.386Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="algorithm">
 <meta name="twitter:card" content="summary">
@@ -110,7 +108,7 @@
     
     <title>
         
-            算法笔记：AcWing-数据结构（二） | Ginkgo&#39;s Blog
+            算法笔记：AcWing | Ginkgo&#39;s Blog
         
     </title>
 
@@ -678,10 +676,10 @@ mjx-container[display="true"] + br {
 			
 			
 			
-			<img src="https://evan.beee.top/img/2023/01/21/5966cf4d2f2c05aecad54e233d9562ff.png" alt="算法笔记：AcWing-数据结构（二）" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75" />
+			<img src="https://evan.beee.top/img/2023/01/21/5966cf4d2f2c05aecad54e233d9562ff.png" alt="算法笔记：AcWing" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75" />
 			
 			<div class="w-full flex items-center absolute bottom-0 justify-start">
-				<h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">算法笔记：AcWing-数据结构（二）</h1>
+				<h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">算法笔记：AcWing</h1>
 			</div>
 			
 		</div>
@@ -702,15 +700,15 @@ mjx-container[display="true"] + br {
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2026-04-08 14:30</span>
-        <span class="mobile">2026-04-08 14:30</span>
+        <span class="desktop">2026-04-09 20:00</span>
+        <span class="mobile">2026-04-09 20:00</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-08 17:34:42</span>
-            <span class="mobile">2026-04-08 17:34:42</span>
+            <span class="desktop">2026-04-09 11:18:15</span>
+            <span class="mobile">2026-04-09 11:18:15</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -725,16 +723,6 @@ mjx-container[display="true"] + br {
                         
                         <li>
                             <a href="/categories/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/">算法笔记</a>&nbsp;
-                        </li>
-                    
-                    
-                
-                    
-                        
-                            <li>></li>
-                        
-                        <li>
-                            <a href="/categories/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>&nbsp;
                         </li>
                     
                     
@@ -757,13 +745,9 @@ mjx-container[display="true"] + br {
 
     
     
-        <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.6k Words</span>
-        </span>
-    
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>7 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>1 Mins</span>
         </span>
     
     
@@ -782,121 +766,25 @@ mjx-container[display="true"] + br {
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<p>这篇继续整理 AcWing 数据结构部分，主要包含三块：</p>
-<ul>
-<li>Trie 树（普通字符串 Trie + 01 Trie）</li>
-<li>并查集（路径压缩、按秩合并、维护附加信息）</li>
-<li>堆（手写小根堆及扩展操作）</li>
-</ul>
-<p>和上一篇一样，尽量给出可直接复用的模板，并补上容易忽略的细节。</p>
-<hr>
-<h3 id="一、Trie-树（前缀树-字典树）"><a href="#一、Trie-树（前缀树-字典树）" class="headerlink" title="一、Trie 树（前缀树 / 字典树）"></a>一、Trie 树（前缀树 / 字典树）</h3><p>Trie 用来高效存储和查询字符串集合，尤其适合“前缀相关”问题。</p>
-<h4 id="1-基础模板（统计某个字符串出现次数）"><a href="#1-基础模板（统计某个字符串出现次数）" class="headerlink" title="1. 基础模板（统计某个字符串出现次数）"></a>1. 基础模板（统计某个字符串出现次数）</h4><ul>
-<li><code>son[p][u]</code>：节点 <code>p</code> 沿字符 <code>u</code> 的儿子编号</li>
-<li><code>cnt[p]</code>：以节点 <code>p</code> 结尾的单词数量</li>
-<li><code>idx</code>：当前可用节点编号（<code>0</code> 号点既是根节点，也是初始空节点）</li>
-</ul>
-<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; son;</span><br><span class="line">vector&lt;<span class="type">int</span>&gt; cnt;</span><br><span class="line"><span class="type">int</span> idx = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init</span><span class="params">(<span class="type">int</span> n)</span> </span>{</span><br><span class="line">    son.<span class="built_in">assign</span>(n, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(<span class="number">26</span>, <span class="number">0</span>));</span><br><span class="line">    cnt.<span class="built_in">assign</span>(n, <span class="number">0</span>);</span><br><span class="line">    idx = <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">insert</span><span class="params">(<span class="type">const</span> string&amp; str)</span> </span>{</span><br><span class="line">    <span class="type">int</span> p = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> ch : str) {</span><br><span class="line">        <span class="type">int</span> u = ch - <span class="string">'a'</span>;</span><br><span class="line">        <span class="keyword">if</span> (!son[p][u]) son[p][u] = ++idx;</span><br><span class="line">        p = son[p][u];</span><br><span class="line">    }</span><br><span class="line">    cnt[p]++;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">query</span><span class="params">(<span class="type">const</span> string&amp; str)</span> </span>{</span><br><span class="line">    <span class="type">int</span> p = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">char</span> ch : str) {</span><br><span class="line">        <span class="type">int</span> u = ch - <span class="string">'a'</span>;</span><br><span class="line">        <span class="keyword">if</span> (!son[p][u]) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        p = son[p][u];</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> cnt[p];</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
-
-<h4 id="2-结构直观理解"><a href="#2-结构直观理解" class="headerlink" title="2. 结构直观理解"></a>2. 结构直观理解</h4><div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   root</span><br><span class="line"> /  |  \</span><br><span class="line">a   b   c</span><br><span class="line">|   |   |</span><br><span class="line">b   c   d   (某些节点可标记为“单词结束”)</span><br></pre></td></tr></table></figure></div>
-
-<blockquote>
-<p>本质上，Trie 是把“字符串比较”拆成“按字符逐层走树”。</p>
-</blockquote>
-<hr>
-<h3 id="二、01-Trie-求最大异或对"><a href="#二、01-Trie-求最大异或对" class="headerlink" title="二、01 Trie 求最大异或对"></a>二、01 Trie 求最大异或对</h3><p>这一类题的核心是：<br><strong>异或值想要最大，就尽量让高位先变成 <code>1</code></strong>。<br>因此查询时从高位到低位，优先走“当前位的相反位”。</p>
-<h4 id="1-思路"><a href="#1-思路" class="headerlink" title="1. 思路"></a>1. 思路</h4><ul>
-<li>插入数字：按二进制位从高到低建树（一般从 <code>31</code> 到 <code>0</code>）</li>
-<li>查询数字 <code>x</code>：<ul>
-<li>当前位是 <code>c</code>，优先走 <code>1 - c</code></li>
-<li>如果不存在，再走 <code>c</code></li>
-</ul>
-</li>
-</ul>
-<p>这样每一位都在贪心地让异或结果尽量大。</p>
-<h4 id="2-模板代码"><a href="#2-模板代码" class="headerlink" title="2. 模板代码"></a>2. 模板代码</h4><div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="type">int</span> n = <span class="built_in">next</span>&lt;<span class="type">int</span>&gt;();</span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> son[<span class="number">100000</span> * <span class="number">32</span> + <span class="number">10</span>][<span class="number">2</span>] = {<span class="number">0</span>};</span><br><span class="line">    <span class="type">int</span> idx = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> insert = [&amp;](<span class="type">int</span> x) {</span><br><span class="line">        <span class="type">int</span> p = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">31</span>; i &gt;= <span class="number">0</span>; --i) {</span><br><span class="line">            <span class="type">int</span> c = (x &gt;&gt; i) &amp; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (!son[p][c]) son[p][c] = ++idx;</span><br><span class="line">            p = son[p][c];</span><br><span class="line">        }</span><br><span class="line">    };</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> query = [&amp;](<span class="type">int</span> x) {</span><br><span class="line">        <span class="type">int</span> p = <span class="number">0</span>, res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">31</span>; i &gt;= <span class="number">0</span>; --i) {</span><br><span class="line">            <span class="type">int</span> c = (x &gt;&gt; i) &amp; <span class="number">1</span>;</span><br><span class="line">            <span class="type">int</span> rev = <span class="number">1</span> - c;</span><br><span class="line">            <span class="keyword">if</span> (son[p][rev]) {</span><br><span class="line">                res |= (<span class="number">1</span> &lt;&lt; i);</span><br><span class="line">                p = son[p][rev];</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                p = son[p][c];</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    };</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> first = <span class="built_in">next</span>&lt;<span class="type">int</span>&gt;();</span><br><span class="line">    <span class="built_in">insert</span>(first);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; ++i) {</span><br><span class="line">        <span class="type">int</span> x = <span class="built_in">next</span>&lt;<span class="type">int</span>&gt;();</span><br><span class="line">        ans = <span class="built_in">max</span>(ans, <span class="built_in">query</span>(x));</span><br><span class="line">        <span class="built_in">insert</span>(x);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; ans &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
-
-<h4 id="3-小提示"><a href="#3-小提示" class="headerlink" title="3. 小提示"></a>3. 小提示</h4><p>当数据范围大时，<code>vector</code> 多层嵌套可能有额外内存和常数开销。<br>竞赛场景下，01 Trie 常用静态数组更稳一些。</p>
-<hr>
-<h3 id="三、并查集（Disjoint-Set-Union-DSU）"><a href="#三、并查集（Disjoint-Set-Union-DSU）" class="headerlink" title="三、并查集（Disjoint Set Union, DSU）"></a>三、并查集（Disjoint Set Union, DSU）</h3><p>并查集主要处理两类操作：</p>
-<ol>
-<li>合并两个集合</li>
-<li>查询两个元素是否属于同一集合</li>
-</ol>
-<h4 id="1-基础原理"><a href="#1-基础原理" class="headerlink" title="1. 基础原理"></a>1. 基础原理</h4><ul>
-<li>每个集合可看成一棵树</li>
-<li>根节点代表集合编号</li>
-<li><code>fa[x]</code> 表示 <code>x</code> 的父节点</li>
-</ul>
-<p>常见问题：</p>
-<ul>
-<li>如何判断根节点：<code>fa[x] == x</code></li>
-<li>如何找集合代表：不断向上找父亲，直到根</li>
-<li>如何优化：路径压缩 + 按秩（或按大小）合并</li>
-</ul>
-<h4 id="2-基础模板（路径压缩-按大小合并）"><a href="#2-基础模板（路径压缩-按大小合并）" class="headerlink" title="2. 基础模板（路径压缩 + 按大小合并）"></a>2. 基础模板（路径压缩 + 按大小合并）</h4><div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">DSU</span> {</span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; fa, sz;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">DSU</span>(<span class="type">int</span> n) {</span><br><span class="line">        fa.<span class="built_in">resize</span>(n + <span class="number">1</span>);</span><br><span class="line">        sz.<span class="built_in">assign</span>(n + <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">iota</span>(fa.<span class="built_in">begin</span>(), fa.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">find</span><span class="params">(<span class="type">int</span> x)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> x == fa[x] ? x : fa[x] = <span class="built_in">find</span>(fa[x]);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">unite</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>{</span><br><span class="line">        x = <span class="built_in">find</span>(x), y = <span class="built_in">find</span>(y);</span><br><span class="line">        <span class="keyword">if</span> (x == y) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span> (sz[x] &lt; sz[y]) <span class="built_in">swap</span>(x, y);  <span class="comment">// 小树挂大树</span></span><br><span class="line">        fa[y] = x;</span><br><span class="line">        sz[x] += sz[y];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">same</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">find</span>(x) == <span class="built_in">find</span>(y);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">size</span><span class="params">(<span class="type">int</span> x)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> sz[<span class="built_in">find</span>(x)];</span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></table></figure></div>
-
-<blockquote>
-<p>如果不做按秩合并，树可能退化成链，<code>find</code> 最坏会接近 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.844ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2141 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D442" d="M740 435Q740 320 676 213T511 42T304 -22Q207 -22 138 35T51 201Q50 209 50 244Q50 346 98 438T227 601Q351 704 476 704Q514 704 524 703Q621 689 680 617T740 435ZM637 476Q637 565 591 615T476 665Q396 665 322 605Q242 542 200 428T157 216Q157 126 200 73T314 19Q404 19 485 98T608 313Q637 408 637 476Z"></path></g><g data-mml-node="mo" transform="translate(763,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(1152,0)"><path data-c="1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(1752,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container>。</p>
-</blockquote>
-<h4 id="3-维护附加信息：到根的偏移量（如“食物链”类题）"><a href="#3-维护附加信息：到根的偏移量（如“食物链”类题）" class="headerlink" title="3. 维护附加信息：到根的偏移量（如“食物链”类题）"></a>3. 维护附加信息：到根的偏移量（如“食物链”类题）</h4><p>有些题不仅要判断连通性，还要维护点与根之间的关系（距离/模关系等）。</p>
-<p>这里给一个“维护到父节点距离 <code>dist[x]</code>”的常见写法：</p>
-<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">DSUWithDist</span> {</span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; fa, dist;</span><br><span class="line">    <span class="comment">// dist[x]: x 到 fa[x] 的距离（或关系值，按题意定义）</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">DSUWithDist</span>(<span class="type">int</span> n) {</span><br><span class="line">        fa.<span class="built_in">resize</span>(n + <span class="number">1</span>);</span><br><span class="line">        dist.<span class="built_in">assign</span>(n + <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="built_in">iota</span>(fa.<span class="built_in">begin</span>(), fa.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">find</span><span class="params">(<span class="type">int</span> x)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (fa[x] == x) <span class="keyword">return</span> x;</span><br><span class="line">        <span class="type">int</span> p = fa[x];</span><br><span class="line">        fa[x] = <span class="built_in">find</span>(fa[x]);</span><br><span class="line">        dist[x] += dist[p];  <span class="comment">// 路径压缩时同步维护到新父亲（根）的距离</span></span><br><span class="line">        <span class="keyword">return</span> fa[x];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 例：已知 relation = dist[y] - dist[x]，将 x 所在集合并到 y 所在集合</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">unite</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y, <span class="type">int</span> relation)</span> </span>{</span><br><span class="line">        <span class="type">int</span> rx = <span class="built_in">find</span>(x), ry = <span class="built_in">find</span>(y);</span><br><span class="line">        <span class="keyword">if</span> (rx == ry) <span class="keyword">return</span>;</span><br><span class="line">        fa[rx] = ry;</span><br><span class="line">        dist[rx] = dist[y] - dist[x] - relation;</span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></table></figure></div>
-
-<p>具体 <code>relation</code> 的定义需要按题目建模（如模 3 关系、差值关系等）。</p>
-<hr>
-<h3 id="四、堆（小根堆）"><a href="#四、堆（小根堆）" class="headerlink" title="四、堆（小根堆）"></a>四、堆（小根堆）</h3><p>堆是一个完全二叉树，常用于维护动态最值。<br>小根堆性质：每个节点都不大于其左右儿子。</p>
-<h4 id="1-基础能力"><a href="#1-基础能力" class="headerlink" title="1. 基础能力"></a>1. 基础能力</h4><ol>
-<li>插入一个数</li>
-<li>查询最小值</li>
-<li>删除最小值</li>
-</ol>
-<h4 id="2-手写堆常见扩展"><a href="#2-手写堆常见扩展" class="headerlink" title="2. 手写堆常见扩展"></a>2. 手写堆常见扩展</h4><ol start="4">
-<li>删除任意元素</li>
-<li>修改任意元素</li>
-</ol>
-<p>这两项是普通 STL <code>priority_queue</code> 不直接支持的（需要额外技巧间接实现）。</p>
-<h4 id="3-下标关系与调整操作"><a href="#3-下标关系与调整操作" class="headerlink" title="3. 下标关系与调整操作"></a>3. 下标关系与调整操作</h4><ul>
-<li>采用 1 下标存储</li>
-<li>左儿子：<code>2 * x</code></li>
-<li>右儿子：<code>2 * x + 1</code></li>
-<li><code>down(u)</code>：某点变大后向下调整</li>
-<li><code>up(u)</code>：某点变小后向上调整</li>
-</ul>
-<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">100010</span>;</span><br><span class="line"><span class="type">int</span> h[N], sz = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 若需要支持“第 k 个插入元素”的修改/删除，可维护映射：</span></span><br><span class="line"><span class="comment">// hp[堆下标] = 插入编号, ph[插入编号] = 堆下标</span></span><br><span class="line"><span class="type">int</span> hp[N], ph[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">heap_swap</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>{</span><br><span class="line">    <span class="built_in">swap</span>(ph[hp[a]], ph[hp[b]]);</span><br><span class="line">    <span class="built_in">swap</span>(hp[a], hp[b]);</span><br><span class="line">    <span class="built_in">swap</span>(h[a], h[b]);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">down</span><span class="params">(<span class="type">int</span> u)</span> </span>{</span><br><span class="line">    <span class="type">int</span> t = u;</span><br><span class="line">    <span class="keyword">if</span> (u * <span class="number">2</span> &lt;= sz &amp;&amp; h[u * <span class="number">2</span>] &lt; h[t]) t = u * <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">if</span> (u * <span class="number">2</span> + <span class="number">1</span> &lt;= sz &amp;&amp; h[u * <span class="number">2</span> + <span class="number">1</span>] &lt; h[t]) t = u * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (u != t) {</span><br><span class="line">        <span class="built_in">heap_swap</span>(u, t);</span><br><span class="line">        <span class="built_in">down</span>(t);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">up</span><span class="params">(<span class="type">int</span> u)</span> </span>{</span><br><span class="line">    <span class="keyword">while</span> (u / <span class="number">2</span> &amp;&amp; h[u / <span class="number">2</span>] &gt; h[u]) {</span><br><span class="line">        <span class="built_in">heap_swap</span>(u / <span class="number">2</span>, u);</span><br><span class="line">        u /= <span class="number">2</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
-
-<h4 id="4-常见操作模板"><a href="#4-常见操作模板" class="headerlink" title="4. 常见操作模板"></a>4. 常见操作模板</h4><div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 插入 x</span></span><br><span class="line">h[++sz] = x;</span><br><span class="line"><span class="built_in">up</span>(sz);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除堆顶</span></span><br><span class="line"><span class="built_in">heap_swap</span>(<span class="number">1</span>, sz);</span><br><span class="line">sz--;</span><br><span class="line"><span class="built_in">down</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除任意位置 k</span></span><br><span class="line"><span class="built_in">heap_swap</span>(k, sz);</span><br><span class="line">sz--;</span><br><span class="line"><span class="built_in">down</span>(k);</span><br><span class="line"><span class="built_in">up</span>(k);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将位置 k 修改为 x</span></span><br><span class="line">h[k] = x;</span><br><span class="line"><span class="built_in">down</span>(k);</span><br><span class="line"><span class="built_in">up</span>(k);</span><br></pre></td></tr></table></figure></div>
-
-<h4 id="5-建堆（-O-n-）"><a href="#5-建堆（-O-n-）" class="headerlink" title="5. 建堆（$O(n)$）"></a>5. 建堆（<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="4.844ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2141 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D442" d="M740 435Q740 320 676 213T511 42T304 -22Q207 -22 138 35T51 201Q50 209 50 244Q50 346 98 438T227 601Q351 704 476 704Q514 704 524 703Q621 689 680 617T740 435ZM637 476Q637 565 591 615T476 665Q396 665 322 605Q242 542 200 428T157 216Q157 126 200 73T314 19Q404 19 485 98T608 313Q637 408 637 476Z"></path></g><g data-mml-node="mo" transform="translate(763,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path></g><g data-mml-node="mi" transform="translate(1152,0)"><path data-c="1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(1752,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></g></g></g></svg></mjx-container>）</h4><div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) cin &gt;&gt; h[i];</span><br><span class="line">sz = n;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = n / <span class="number">2</span>; i; --i) <span class="built_in">down</span>(i);</span><br></pre></td></tr></table></figure></div>
-
-<p>从 <code>n / 2</code> 开始向前 <code>down</code>，因为叶子节点本身不需要下沉。</p>
-<hr>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>这部分内容的主线是“维护结构 + 维护不变量”：</p>
-<ul>
-<li>Trie：维护前缀路径</li>
-<li>并查集：维护集合代表与关系</li>
-<li>堆：维护父子有序性</li>
-</ul>
-<p>模板并不复杂，关键在于边界和语义写清楚。<br>尤其是并查集附加信息与手写堆映射数组，这两块最容易在细节上出错。</p>
-
+			
 		</div>
 
 		
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> 算法笔记：AcWing-数据结构（二）</li>
+        <li><strong>Title:</strong> 算法笔记：AcWing</li>
         <li><strong>Author:</strong> Ginkgo</li>
         <li><strong>Created at
-                :</strong> 2026-04-08 14:30:00</li>
+                :</strong> 2026-04-09 20:00:00</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-04-08 17:34:42
+                    :</strong> 2026-04-09 11:18:15
             </li>
         
         <li>
-            <strong>Link:</strong> https://g1nkgo7.github.io/2026/04/08/算法笔记-AcWing-数据结构（二）/
+            <strong>Link:</strong> https://g1nkgo7.github.io/2026/04/09/算法笔记-AcWing-搜索与图论/
         </li>
         <li>
             <strong>
@@ -931,9 +819,9 @@ mjx-container[display="true"] + br {
 			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2026/04/06/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%88%E4%B8%80%EF%BC%89/">
+				<a class="next" rel="next" href="/2026/04/09/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">算法笔记：AcWing-数据结构（一）</span>
+						<span class="post-nav-title-item truncate max-w-48">数据结构核心：从链表到哈希表的实用指南</span>
 						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -1023,8 +911,8 @@ mjx-container[display="true"] + br {
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">算法笔记：AcWing-数据结构（二）</div>
-		<ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81Trie-%E6%A0%91%EF%BC%88%E5%89%8D%E7%BC%80%E6%A0%91-%E5%AD%97%E5%85%B8%E6%A0%91%EF%BC%89"><span class="nav-text">一、Trie 树（前缀树 &#x2F; 字典树）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%8101-Trie-%E6%B1%82%E6%9C%80%E5%A4%A7%E5%BC%82%E6%88%96%E5%AF%B9"><span class="nav-text">二、01 Trie 求最大异或对</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%B9%B6%E6%9F%A5%E9%9B%86%EF%BC%88Disjoint-Set-Union-DSU%EF%BC%89"><span class="nav-text">三、并查集（Disjoint Set Union, DSU）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%A0%86%EF%BC%88%E5%B0%8F%E6%A0%B9%E5%A0%86%EF%BC%89"><span class="nav-text">四、堆（小根堆）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-text">小结</span></a></li></ol>
+		<div class="page-title">算法笔记：AcWing</div>
+		
 
 	</div>
 </div>
@@ -1056,7 +944,7 @@ mjx-container[display="true"] + br {
                     </span>
                     
                         <span>
-                            11k words in total
+                            11.1k words in total
                         </span>
                     
                 </p>
