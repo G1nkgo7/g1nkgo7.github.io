@@ -85,14 +85,16 @@
     
     
         
-        <meta property="og:type" content="article">
+        <meta name="description" content="dfs 深度优先搜索一个很执着的人可能我撞了南墙才会回头吧~ stack &#x2F; 递归空间 O(h) 不具最短性 回溯注意恢复现场 剪枝 从题目入手全排列数字 1234567891011121314151617181920212223242526272829cont int N &#x3D; 10;int n;int path[N];bool st[N];void dfs(int u){    if(u &#x3D;&#x3D;">
+<meta property="og:type" content="article">
 <meta property="og:title" content="算法笔记：AcWing">
 <meta property="og:url" content="http://example.com/2026/04/09/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E6%90%9C%E7%B4%A2%E4%B8%8E%E5%9B%BE%E8%AE%BA/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="dfs 深度优先搜索一个很执着的人可能我撞了南墙才会回头吧~ stack &#x2F; 递归空间 O(h) 不具最短性 回溯注意恢复现场 剪枝 从题目入手全排列数字 1234567891011121314151617181920212223242526272829cont int N &#x3D; 10;int n;int path[N];bool st[N];void dfs(int u){    if(u &#x3D;&#x3D;">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/images/redefine-og.webp">
 <meta property="article:published_time" content="2026-04-09T12:00:00.000Z">
-<meta property="article:modified_time" content="2026-04-09T03:18:15.386Z">
+<meta property="article:modified_time" content="2026-04-09T14:34:03.828Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="algorithm">
 <meta name="twitter:card" content="summary">
@@ -644,15 +646,15 @@ mjx-container[display="true"] + br {
 
         <div class="statistics flex justify-around my-2.5">
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">9</div>
         <div class="label text-third-text-color text-sm">Tags</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">7</div>
         <div class="label text-third-text-color text-sm">Categories</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">9</div>
         <div class="label text-third-text-color text-sm">Posts</div>
     </a>
 </div>
@@ -707,8 +709,8 @@ mjx-container[display="true"] + br {
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-09 11:18:15</span>
-            <span class="mobile">2026-04-09 11:18:15</span>
+            <span class="desktop">2026-04-09 22:34:03</span>
+            <span class="mobile">2026-04-09 22:34:03</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -745,9 +747,13 @@ mjx-container[display="true"] + br {
 
     
     
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2k Words</span>
+        </span>
+    
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>1 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>9 Mins</span>
         </span>
     
     
@@ -766,7 +772,99 @@ mjx-container[display="true"] + br {
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			
+			<h3 id="dfs-深度优先搜索"><a href="#dfs-深度优先搜索" class="headerlink" title="dfs 深度优先搜索"></a>dfs 深度优先搜索</h3><p>一个很执着的人<br>可能我撞了南墙才会回头吧~</p>
+<p>stack / 递归<br>空间 O(h)</p>
+<p>不具最短性</p>
+<p>回溯<br>注意恢复现场</p>
+<p>剪枝</p>
+<p>从题目入手<br>全排列数字</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cont <span class="type">int</span> N = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> path[N];</span><br><span class="line"><span class="type">bool</span> st[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> u)</span></span>{</span><br><span class="line">    <span class="keyword">if</span>(u == n){ <span class="comment">//结束输出</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i  = <span class="number">0</span> ;i&lt;n;i++)</span><br><span class="line">        cout &lt;&lt;path[i];</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>;i&lt;=n;i++) <span class="comment">// 枚举下一个情况</span></span><br><span class="line">    <span class="keyword">if</span>(!st[i]){</span><br><span class="line">        st[i] = <span class="literal">true</span>;</span><br><span class="line">        path[u] = i;</span><br><span class="line">        <span class="built_in">dfs</span>(u<span class="number">+1</span>);</span><br><span class="line">        st[i] = <span class="literal">false</span>; <span class="comment">// 恢复现场</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>{</span><br><span class="line">    cin &gt;&gt;n;</span><br><span class="line">    <span class="built_in">dfs</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>八皇后问题<br>第一种思路：全排序思路 + 剪枝<br>剪枝: 在每一次新放 的时候 判断当前有无冲突，如果有冲突就可以返回 了</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cont <span class="type">int</span> N = <span class="number">20</span>; <span class="comment">// 对角线 = 2n - 1 </span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">char</span> g[N][N];</span><br><span class="line"><span class="type">bool</span> col[N],dg[N],udf[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> u)</span></span>{</span><br><span class="line">    <span class="keyword">if</span>(u == n){ <span class="comment">//结束输出</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i  = <span class="number">0</span> ;i&lt;n;i++)</span><br><span class="line">        cout &lt;&lt;path[i];</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>;i&lt;=n;i++) <span class="comment">// 枚举下一个情况</span></span><br><span class="line">    <span class="keyword">if</span>(!col[i] &amp;&amp; !dg[u+i]&amp;&amp; !udg[n-u+i]){ <span class="comment">// 剪枝判断，对角线 坐标 转化 u+i n-u+1 (n 偏移量，防负数)</span></span><br><span class="line">        g[u][i] = <span class="string">'Q'</span></span><br><span class="line">        col[i] = dg[u+i] = udg[n-u+i] = <span class="literal">true</span>;</span><br><span class="line">        <span class="built_in">dfs</span>(u<span class="number">+1</span>);</span><br><span class="line">        col[i] = dg[u+i] = udg[n-u+i] = <span class="literal">false</span>; <span class="comment">// 恢复现场</span></span><br><span class="line">        g[u][i] = <span class="string">"."</span></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="built_in">main</span>(){</span><br><span class="line">    cin &gt;&gt;n;</span><br><span class="line">    <span class="comment">// g[][[]初始化为 .</span></span><br><span class="line">    <span class="built_in">dfs</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>第二种：每个格子判断 放与不放</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">cont <span class="type">int</span> N = <span class="number">20</span>; <span class="comment">// 对角线 = 2n - 1 </span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">char</span> g[N][N];</span><br><span class="line"><span class="type">bool</span> col[N],dg[N],udf[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y,<span class="type">int</span> s)</span></span>{</span><br><span class="line">    <span class="keyword">if</span>(y == n) y = <span class="number">0</span>,x++;</span><br><span class="line">    <span class="keyword">if</span>(x == n ){ <span class="comment">//结束输出</span></span><br><span class="line">        <span class="keyword">if</span>(s == n){</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i  = <span class="number">0</span> ;i&lt;n;i++)</span><br><span class="line">            cout &lt;&lt;path[i];</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">//不放</span></span><br><span class="line">    <span class="built_in">dfs</span>(x,y<span class="number">+1</span>,s);</span><br><span class="line">    <span class="comment">// 放</span></span><br><span class="line">    <span class="keyword">if</span>(!row[x]&amp;&amp;!col[y] &amp;&amp; !dg[x+y]&amp;&amp; !udg[x-y+n]){ <span class="comment">// 剪枝判断，对角线 坐标 转化 u+i n-u+1 (n 偏移量，防负数)</span></span><br><span class="line">        g[x][y] = <span class="string">'Q'</span></span><br><span class="line">        row[x] = col[y] = dg[x+y] = udg[x-y+n] = <span class="literal">true</span>;</span><br><span class="line">        <span class="built_in">dfs</span>(x,y<span class="number">+1</span>,s<span class="number">+1</span>);</span><br><span class="line"></span><br><span class="line">        row[x] = col[y] = dg[x+y] = udg[x-y+n] = <span class="literal">false</span>;<span class="comment">// 恢复现场</span></span><br><span class="line">          g[x][y] = <span class="string">"."</span></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="built_in">main</span>(){</span><br><span class="line">    cin &gt;&gt;n;</span><br><span class="line">    <span class="comment">// g[][[]初始化为 .</span></span><br><span class="line">    <span class="built_in">dfs</span>(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>第二种会慢一些，第一种情况加了假设先验 一行放一个，所以会快</p>
+<h3 id="bfs-宽度优先搜索"><a href="#bfs-宽度优先搜索" class="headerlink" title="bfs 宽度优先搜索"></a>bfs 宽度优先搜索</h3><p>眼观六路、耳听八方 广撒网<br>queue </p>
+<p>空间 O(2^h)</p>
+<p>有个“最短路”的概念。bfs 第一次扩展到的点。有距离最短的性质</p>
+<p>最短路与dp的一些关系<br>最短路问题 包含 dp 问题<br>dp 是一种，没有环存在的最短路问题</p>
+<p>初始化 queue<br>while（queue)不空{<br>    t &lt;- 队头<br>    扩展 t<br>}</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">int</span> n ,m;</span><br><span class="line"><span class="type">int</span> g[N][N],d[N][N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">bfs</span><span class="params">()</span></span>{</span><br><span class="line">    queue q;</span><br><span class="line">    q.<span class="built_in">emplace_back</span>({<span class="number">0</span>,<span class="number">0</span>});</span><br><span class="line">    <span class="built_in">memset</span>(d,<span class="number">-1</span>,<span class="keyword">sizeof</span> d);</span><br><span class="line">    d[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> dx[<span class="number">4</span>] = {<span class="number">-1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>},dy[<span class="number">4</span>] = {<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">-1</span>};</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(!q.<span class="built_in">empty</span>()){</span><br><span class="line">        <span class="type">int</span>  t =q.<span class="built_in">front</span>();</span><br><span class="line">        q.<span class="built_in">pop</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i =<span class="number">0</span>;i&lt;<span class="number">4</span>;++i){</span><br><span class="line">            <span class="keyword">auto</span> [_x,_y] = t;</span><br><span class="line">            <span class="type">int</span> x = _x +dx[i],y = _y + dy[i];</span><br><span class="line">            <span class="keyword">if</span>(x&gt;=<span class="number">0</span> &amp;&amp; x&lt;n &amp;&amp; y&gt;=<span class="number">0</span> &amp;&amp;y&lt;m&amp;&amp;g[x][y] ==<span class="number">0</span>&amp;&amp;d[x][y] == <span class="number">-1</span>){</span><br><span class="line">                d[x][y] = d[_x][_y] <span class="number">+1</span>;</span><br><span class="line">                q.<span class="built_in">emplace_back</span>({x,y});</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> d[n<span class="number">-1</span>][m<span class="number">-1</span>];</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>如何 存储路径？<br>额外数组，记录下 每个点是从哪个点扩展过来的就行<br>比如<br>d[x][y] = d[_x][_y] +1;<br>// Prev[x][y] = {-x,_y};<br>int x = n - 1, y = m - 1;<br>while (x || y){<br>cout &lt;&lt; × &lt;&lt; ‘ ‘ &lt; &lt; y &lt;&lt; endl;<br>auto t = Prev[x][y];<br>x = t.first, y = t.second;<br>}</p>
+<h3 id="树与图的存储"><a href="#树与图的存储" class="headerlink" title="树与图的存储"></a>树与图的存储</h3><p>树是一个特殊的图<br>无环连通图</p>
+<p>图：<br>有向图、<br>无向图<br>（无向图是一种特殊的有向图）=_= </p>
+<p>存储方式：<br>邻接矩阵 g[][]<br>1 [0 0 1 1]<br>2 [1 0 0 1]<br>3 [0 0 0 1]<br>4 [0 0 0 0]</p>
+<p>邻接表 （数组 + 单链表）<br>1: 3 4<br>2: 1 4<br>3: 4<br>4:</p>
+<p>vector 实现<br>    // 邻接表<br>    vector&lt;vector<edge>&gt; gt(n + 1);<br>          // 邻接表加边<br>        gt[u].emplace_back(v, w);</edge></p>
+<p>数组模拟实现</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">100010</span>,M = N*<span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> h[N],e[M],ne[M],idx;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">add</span><span class="params">(<span class="type">int</span> u,<span class="type">int</span> v)</span></span>{</span><br><span class="line">    e[idx] = v,ne[idx] = h[u],h[u] = idx++;</span><br><span class="line">}</span><br><span class="line"><span class="comment">// init</span></span><br><span class="line"><span class="built_in">memset</span>(h,<span class="number">-1</span>,<span class="keyword">sizeof</span> h)</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+
+
+<p>这个跟链式前向星很像，可以理解为 把 e 和 ne 抽象成了一个结构体<br>加上了 边权<br>struct Edge {<br>    int to, w, next;<br>};</p>
+<p>// 链式前向星<br>    vector<edge> ls(n + 1);<br>    // 前向星的数组模拟链表<br>    vector<int> head(n + 1, 0);<br>    int tot = 0;</int></edge></p>
+<p>加边</p>
+<pre><code>function&lt;void(int u, int v, int w)&gt; add = [&amp;](int u, int v, int w) {
+    ls[++tot].to = v;
+    ls[tot].w = w;
+    ls[tot].next = head[u];
+    head[u] = tot;
+};
+</code></pre>
+<p>遍历<br> // 强调一下前向星的遍历方式，我这里以 0 为结束标识<br>    // 遍历以 u 为起点的边<br>    int u = 1;<br>    for (int i = head[u]; i; i = ls[i].next) {<br>        // 边的终点与权重<br>        int v = ls[i].to, w = ls[i].w;<br>    }<br>    return;</p>
+<pre><code>其实就是数组模拟链表的过程
+</code></pre>
+<p>树：<br>bfs<br>层序遍历</p>
+<p>dfs<br>前序遍历 </p>
+<p>后序遍历 </p>
+<h3 id="树与图的-深度优先搜索"><a href="#树与图的-深度优先搜索" class="headerlink" title="树与图的 深度优先搜索"></a>树与图的 深度优先搜索</h3><p>void dfs(int u){<br>    st[u] = true;<br>    // 遍历出边<br>    for(int i = h[u];i!=-1,i = ne[i])<br>    {<br>        int j = ne[i ];<br>        if(!st[j]) dfs(j);<br>    }<br>}</p>
+<p>树的重心<br>在 dfs 遍历的过程当中，求出 每个子树种的点的数量<br>再一次遍历删除每个点，算剩余连通块大小（删除节点的左右儿子与 整树 - 子树）最多三个部分</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 以 u 为根的子树中点的数量</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> u)</span></span>{</span><br><span class="line">    st[u] = <span class="literal">true</span>;</span><br><span class="line">    <span class="type">int</span> sum = <span class="number">1</span>,res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=h[u],i!=<span class="number">-1l</span>i = ne[i]){</span><br><span class="line">        <span class="type">int</span> j = e[i];</span><br><span class="line">        <span class="keyword">if</span>(!st[j]){</span><br><span class="line">            <span class="type">int</span> s =<span class="built_in">dfs</span>(j);</span><br><span class="line">            res = <span class="built_in">max</span>(res,s);</span><br><span class="line">            sum += s;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    res = <span class="built_in">max</span>(re,n-sum);</span><br><span class="line"></span><br><span class="line">    ans = <span class="built_in">min</span>(ans,res);</span><br><span class="line">     </span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="树与图的宽度优先搜索"><a href="#树与图的宽度优先搜索" class="headerlink" title="树与图的宽度优先搜索"></a>树与图的宽度优先搜索</h3><p>所有边权都是 1 就可以考虑 bfs 从最短路</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">bfs</span><span class="params">()</span></span>{</span><br><span class="line">    queue&lt;<span class="type">int</span>&gt;q;</span><br><span class="line">    q.<span class="built_in">push_back</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">memset</span>(d,<span class="number">-1</span>,<span class="keyword">sizeof</span> d);</span><br><span class="line">    d[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(!q.<span class="built_in">empty</span>()){</span><br><span class="line">        <span class="type">int</span> t =  q.<span class="built_in">front</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i =h[t];i!=<span class="number">-1</span>;i = ne[i]){</span><br><span class="line">            <span class="type">int</span> j = e[i];</span><br><span class="line">            <span class="keyword">if</span>(d[j] == <span class="number">-1</span>)</span><br><span class="line">            {</span><br><span class="line">                d[j] = d[t] <span class="number">+1</span>;</span><br><span class="line">                q.<span class="built_in">push_back</span>(j)</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> d[n];</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h3><p>图的 bfs 的一个应用<br>针对有向图无环图 一定存在拓扑序列</p>
+<p>一个 有向图无环图 一定存在一个入度为0 的点（可以通过反证法 + 抽屉法 证明）</p>
+<p>可以判环，如果不存在拓扑序列，就存在环</p>
+<p>从起始点（入度为0 的点）出发，依次去除前驱</p>
+<p>当前点的 所有出边的 点 入度 - 1<br>如果入度 == 0，就可以入队了</p>
+<p>如果存在环，入度不会为0，可以维护一共入队了多少，就可以判环了</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 前面插入的时候维护入度</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">topsort</span><span class="params">()</span></span>{</span><br><span class="line">    queue q;</span><br><span class="line">    <span class="type">int</span> size = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">        <span class="keyword">if</span>(!d[i])</span><br><span class="line">            q.<span class="built_in">push_back</span>(i),++size;</span><br><span class="line">    <span class="keyword">while</span>(!q.<span class="built_in">empty</span>()){</span><br><span class="line">        <span class="type">int</span> t = q.<span class="built_in">front</span>();</span><br><span class="line">        q.<span class="built_in">pop</span>();</span><br><span class="line">        res.<span class="built_in">push_back</span>(t);  <span class="comment">//  记录拓扑序</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i  = h[t];i!=<span class="number">-1</span>;i = ne[i]){</span><br><span class="line">            <span class="type">int</span> j = e[i];</span><br><span class="line">            d[j] --; <span class="comment">// 入度减1</span></span><br><span class="line">            <span class="keyword">if</span>(!d[j])</span><br><span class="line">                q.<span class="built_in">push_back</span>(j),++size;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> res.<span class="built_in">size</span>() == n;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>注意 拓扑序列并不唯一</p>
+<p>OJ 中对于这种多解 使用 Special Judge（SPJ，特判） 判断的</p>
+<h3 id="最短路"><a href="#最短路" class="headerlink" title="最短路"></a>最短路</h3><p>单源最短路<br>从一个点到其他所有点的最短路</p>
+<ol>
+<li>所有边权都是整数<ol>
+<li>朴素 dijk</li>
+<li>heap 优化 djk</li>
+</ol>
+</li>
+<li>存在负数权重边<ol>
+<li>Bellman-Ford</li>
+<li>spfa (如果限制经过的边数不超过k个，则无法使用)</li>
+</ol>
+</li>
+</ol>
+<p>多源汇最短路: 很多不同起点到其他点的最短路<br>    1. Floyd</p>
+<p>// 没区分有向图和无向图 因为都适用<br>无向图连两条边就行了</p>
+<h4 id="朴素-Dijkstra"><a href="#朴素-Dijkstra" class="headerlink" title="朴素 Dijkstra"></a>朴素 Dijkstra</h4><p>O(n^2) 适合稠密图 m ~ n^2 // n 是点 m 是边</p>
+<p>集合 s 当前已经确定了最短距离的 点</p>
+<ol>
+<li>初始化距离 dis[1] = 0,dis[1] = inf;</li>
+<li>for i : 0~n<br> 不在 s 中的 距离最近的点 t（最小的dis[t]）<br> s inset t<br> 用 t 更新 其他所有点的距离： dis[x] &gt; dis[t] + w(t,x) 就更新 （贪心可以证明）<br>每一次迭代可以确定一个点的最短距离</li>
+</ol>
+<p>稠密图 用邻接矩阵<br>稀疏图 用邻接表</p>
+<h4 id="堆优化-Dijkstra"><a href="#堆优化-Dijkstra" class="headerlink" title="堆优化 Dijkstra"></a>堆优化 Dijkstra</h4><p>O(mlogn) 适合稀疏图 m ~ n</p>
+<h4 id="bellman-ford"><a href="#bellman-ford" class="headerlink" title="bellman-ford"></a>bellman-ford</h4><p>O(mn)</p>
+<h4 id="spfa"><a href="#spfa" class="headerlink" title="spfa"></a>spfa</h4><p>一般：O(m)<br>最坏: O(mn)</p>
+<h4 id="floyd"><a href="#floyd" class="headerlink" title="floyd"></a>floyd</h4><p>O（n^3)</p>
+<h3 id="最小生成树"><a href="#最小生成树" class="headerlink" title="最小生成树"></a>最小生成树</h3><h3 id="匈牙利-二分图"><a href="#匈牙利-二分图" class="headerlink" title="匈牙利 二分图"></a>匈牙利 二分图</h3>
 		</div>
 
 		
@@ -780,7 +878,7 @@ mjx-container[display="true"] + br {
         
             <li>
                 <strong>Updated at
-                    :</strong> 2026-04-09 11:18:15
+                    :</strong> 2026-04-09 22:34:03
             </li>
         
         <li>
@@ -912,7 +1010,7 @@ mjx-container[display="true"] + br {
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">算法笔记：AcWing</div>
-		
+		<ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#dfs-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2"><span class="nav-text">dfs 深度优先搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bfs-%E5%AE%BD%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2"><span class="nav-text">bfs 宽度优先搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%91%E4%B8%8E%E5%9B%BE%E7%9A%84%E5%AD%98%E5%82%A8"><span class="nav-text">树与图的存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%91%E4%B8%8E%E5%9B%BE%E7%9A%84-%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2"><span class="nav-text">树与图的 深度优先搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%91%E4%B8%8E%E5%9B%BE%E7%9A%84%E5%AE%BD%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2"><span class="nav-text">树与图的宽度优先搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F"><span class="nav-text">拓扑排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E7%9F%AD%E8%B7%AF"><span class="nav-text">最短路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91"><span class="nav-text">最小生成树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%88%E7%89%99%E5%88%A9-%E4%BA%8C%E5%88%86%E5%9B%BE"><span class="nav-text">匈牙利 二分图</span></a></li></ol>
 
 	</div>
 </div>
@@ -940,11 +1038,11 @@ mjx-container[display="true"] + br {
                 
                 <p class="post-count space-x-0.5">
                     <span>
-                        8 posts in total
+                        9 posts in total
                     </span>
                     
                         <span>
-                            11.4k words in total
+                            14.5k words in total
                         </span>
                     
                 </p>
