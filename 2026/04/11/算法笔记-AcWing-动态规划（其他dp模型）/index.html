@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="">
+    
+    
+    <meta name="author" content="Ginkgo">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2026/04/11/算法笔记-acwing-动态规划（其他dp模型）/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+        
+        <meta name="description" content="线性 dp递推方程有一个明显的 线性关系 数字三角形从 顶 到 左下方  &#x2F; 右下方 使得路径值最大 遇到任何 DP 问题，按这个框架思考： 123456789101112131415161718191. 状态表示   - f[i][j] 表示什么？ 第i行 第j个   - 集合是什么？（所有满足某条件的方案）        所有从起点 走到（i,j)的路径   - 属性是什么？（ max 路径">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法笔记：AcWing - 动态规划（其他DP模型）">
+<meta property="og:url" content="http://example.com/2026/04/11/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88%E5%85%B6%E4%BB%96dp%E6%A8%A1%E5%9E%8B%EF%BC%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="线性 dp递推方程有一个明显的 线性关系 数字三角形从 顶 到 左下方  &#x2F; 右下方 使得路径值最大 遇到任何 DP 问题，按这个框架思考： 123456789101112131415161718191. 状态表示   - f[i][j] 表示什么？ 第i行 第j个   - 集合是什么？（所有满足某条件的方案）        所有从起点 走到（i,j)的路径   - 属性是什么？（ max 路径">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-04-11T06:30:00.000Z">
+<meta property="article:modified_time" content="2026-04-12T03:00:17.381Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.ico" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+    <meta name="theme-color" content="#927efb">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <!--- Page Info-->
+    
+    <title>
+        
+            算法笔记：AcWing - 动态规划（其他DP模型） | Ginkgo&#39;s Blog
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+        
+            
+    
+            
+    
+            
+                
+                    <link rel="stylesheet" href="/fonts/fonts.css" />
+                
+    
+            
+                
+                    <style>.ml13, .preloader .ml13 { font-family: "WLJH-w800", sans-serif !important; font-weight: 800 !important; } #subtitle, .home-banner #subtitle { font-family: "YouYuan", "Zhi Mang Xing", sans-serif !important; }</style>
+                
+    
+            
+                
+                    <script data-swup-reload-script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+                
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+        <link href="/fonts/fonts.css" rel="stylesheet">
+        <style>
+            .preloader .ml13 {
+                font-family: 'WLJH-w800', 'Chillax-Variable', sans-serif !important;
+            }
+
+            #subtitle,
+            #subtitle + .typed-cursor {
+                font-family: 'YouYuan', '幼圆', 'Microsoft YaHei', sans-serif !important;
+            }
+        </style>
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+        
+<script src="/js/build/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"en","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":true,"link_icon":true,"delete_mask":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":["True love prevails."]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"atom-one-light","dark":"atom-one-dark"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#927efb","secondary":null,"default_mode":"dark"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":true,"custom_message":"岁月朝暮并往 愿你行至天光"},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":null},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/The_Cliffs_1.jpg","dark":"/images/The_Cliffs_6.jpg"},"title":"Ginkgo Forever","subtitle":{"text":["闲言碎语加载中……"],"hitokoto":{"enable":true,"show_author":false,"api":"https://v1.hitokoto.cn?max_length=20"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#fff"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.8rem","line_height":1.2},"custom_font":{"enable":false,"family":"STXINGKA","url":"/fonts/fonts.css"},"social_links":{"enable":false,"style":"default","links":[{"icon":"fa-brands fa-github","url":null},{"icon":"fa-brands fa-twitter","url":null},{"icon":"fa-solid fa-at","url":"you@example.com"},{"icon":"fa-brands fa-telegram","url":null},{"icon":"/images/custom-icon.svg","url":null}],"qrs":[{"icon":"fa-brands fa-weixin","qr":null},{"icon":"/images/custom-icon.svg","qr":null}]}},"plugins":{"feed":{"enable":true},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"梨花香","artist":"佚名","url":"/music/source/梨花香.mp3","cover":"/music/image/梨花香.jpg","lrc":"/music/lrc/梨花香.lrc"}]},"mermaid":{"enable":false,"version":"11.4.1","theme":{"light":"default","dark":"dark"}}},"version":"2.9.0","navbar":{"auto_hide":true,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-solid fa-house"},"Archives":{"path":"/archives","icon":"fa-solid fa-archive"},"About":{"path":"/about","icon":"fa-solid fa-user"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur","masonry":{"batch_size":12,"initial_batch_size":24}},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footer":{"runtime":true,"icon":"<i class=\"fa-solid fa-heart fa-beat\" style=\"--fa-animation-duration: 0.5s; color: #f54545\"></i>","start":"2022/8/17 11:45:14","statistics":true,"customize":null,"icp":{"enable":false,"number":null,"url":null}},"footerStart":"2022/8/17 11:45:14","mermaid":{"style":{"light":"default","dark":"dark"}}};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.i18n = {"search":"Search...","toc":"On this page","prev":"Prev","next":"Next","prev_posts":"Prev posts","next_posts":"Next posts","page":"Page %d","recent_posts":"Recent Posts","share":"Share","powered_by":"POWERED BY %s","theme":"THEME","rss_feed":"RSS Feed","category":"Category","categories":"Categories","tag":"Tag","tags":"Tags","post":"Post","posts":"Posts","tagcloud":"Tag Cloud","comment":"Comment","comments":"Comments","home":"Home","archive":"Archive","archives":"Archives","top":"TOP","sticky":"Sticky","go-back-home":"Go Back Home","masonry_loading":"Loading photos...","image_viewer":"Image viewer","close":"Close","exif":{"title":"EXIF","cards":{"camera":"Camera","lens":"Lens","exposure":"Exposure","other":"Other"},"fields":{"make":"Brand","model":"Model","date_taken":"Date taken","lens_model":"Lens","focal_length":"Focal length","focus_mode":"Focus mode","shutter":"Shutter","aperture":"Aperture","iso":"ISO","exposure_program":"Exposure program","exposure_compensation":"Exposure compensation","metering_mode":"Metering mode","flash":"Flash","white_balance":"White balance","latitude":"Latitude","longitude":"Longitude","altitude":"Altitude"},"status":{"loading":"Loading...","no_exif":"No EXIF available","library_missing":"EXIF library not loaded","image_source_missing":"Image source unavailable","unavailable":"EXIF unavailable (blocked by CORS or missing metadata)","flag_unavailable":"EXIF unavailable"}},"about":"About","changelog":"Changelog","links":"Links","link":"Link","friends":"Friends","friend":"Friend","timeline":"Timeline","shuoshuo":"Shuoshuo","bookmarks":"Bookmarks","site_uv":"VISITOR COUNT","site_pv":"TOTAL PAGE VIEWS","read_more":"Read more","wordcount":"Words","min2read":"Mins","status":"Status","runtime":"Blog up for","days":"days","hours":"hrs","minutes":"Min","seconds":"Sec","optimized_by":"and Optimized by Evan","rights":"All Rights Reserved","site_posts":"%s posts in total","site_wordcount":"%s words in total","copyright":{"author":"Author","title":"Title","link":"Link","create_time":"Created at","update_time":"Updated at","license_title":"License","license_content":"This work is licensed under %s.","all_rights_reserved":"All Rights Reserved &#169; %s","public_domain":"This work is in the public domain."},"ago":{"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"},"create_time":"Created","update_time":"Updated","expired":"This post is written %s days ago, and the content may not be up to date."};
+    window.data = {"masonry":true};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 8.1.1"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+
+<body>
+	<div class="progress-bar-container">
+	
+	<span class="scroll-progress-bar"></span>
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<link href="/fonts/fonts.css" rel="stylesheet">
+<style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 800;
+        font-family: 'WLJH-w800', 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        岁月朝暮并往 愿你行至天光
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({ loop: true })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [20, 0],
+                translateZ: 0,
+                opacity: [0, 1],
+                filter: ['blur(5px)', 'blur(0px)'],
+                easing: "easeOutExpo",
+                duration: 1200,
+                delay: (el, i) => 300 + 20 * i,
+            })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [0, -20],
+                opacity: [1, 0],
+                filter: ['blur(0px)', 'blur(5px)'],
+                easing: "easeInExpo",
+                duration: 1000,
+                delay: (el, i) => 15 * i,
+                complete: function() {
+                    hidePreloader();
+                }
+            }, '-=700');
+
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ginkgo&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-solid fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-solid fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/about"
+                                        >
+                                    <i class="fa-solid fa-user fa-fw"></i>
+                                    ABOUT
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-solid fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-solid fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/about"
+                        >
+                            <span>
+                                ABOUT
+                            </span>
+                            
+                                <i class="fa-solid fa-user fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">9</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">9</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">12</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			
+			
+			<img src="/images/cover/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88%E5%85%B6%E4%BB%96DP%E6%A8%A1%E5%9E%8B%EF%BC%89.png" alt="算法笔记：AcWing - 动态规划（其他DP模型）" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75" />
+			
+			<div class="w-full flex items-center absolute bottom-0 justify-start">
+				<h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">算法笔记：AcWing - 动态规划（其他DP模型）</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/avatar.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">Ginkgo</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">True love prevails.</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-04-11 14:30</span>
+        <span class="mobile">2026-04-11 14:30</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-04-12 11:17</span>
+            <span class="mobile">2026-04-12 11:17</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0%EF%BC%8C%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">算法笔记，动态规划</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/algorithm/">algorithm</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.2k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>20 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h3 id="线性-dp"><a href="#线性-dp" class="headerlink" title="线性 dp"></a>线性 dp</h3><p>递推方程有一个明显的 线性关系</p>
+<p>数字三角形<br>从 顶 到 左下方  / 右下方 使得路径值最大</p>
+<p>遇到任何 DP 问题，按这个框架思考：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">1. 状态表示</span><br><span class="line">   - f[i][j] 表示什么？ 第i行 第j个</span><br><span class="line">   - 集合是什么？（所有满足某条件的方案）</span><br><span class="line">        所有从起点 走到（i,j)的路径</span><br><span class="line">   - 属性是什么？（ max 路径 权重和 ）</span><br><span class="line"></span><br><span class="line">2. 状态转移</span><br><span class="line">   - 如何划分子问题 集合划分</span><br><span class="line">    从左上 到当前点  / 从右上 到当前点</span><br><span class="line">   - 转移方程是什么？</span><br><span class="line">    dp[i][j] = max（dp[i-1][j-1] ,dp[i-1] [j] ）+ w[i][j] </span><br><span class="line"></span><br><span class="line">3. 初始化</span><br><span class="line">   - 边界条件是什么？</span><br><span class="line">   - f[0][0] 等于多少？</span><br><span class="line"></span><br><span class="line">4. 优化</span><br><span class="line">   - 能否滚动数组？</span><br><span class="line">   - 枚举顺序有什么要求？</span><br></pre></td></tr></table></figure></div>
+
+<p>dp 的 时间复杂度 = 状态数量 * 转移次数</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">510</span>;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> a[N][N], f[N][N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    <span class="comment">// 这里要多初始化两列</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= i; j++) {</span><br><span class="line">            cin &gt;&gt; a[i][j];</span><br><span class="line">        }</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt;= i + <span class="number">1</span>; j++) {</span><br><span class="line">            f[i][j] = -INF;</span><br><span class="line">        }</span><br><span class="line">    f[<span class="number">1</span>][<span class="number">1</span>] = a[<span class="number">1</span>][<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= i; j++)</span><br><span class="line">            f[i][j] = <span class="built_in">max</span>(f[i - <span class="number">1</span>][j - <span class="number">1</span>], f[i - <span class="number">1</span>][j]) + a[i][j];</span><br><span class="line">    cout &lt;&lt; *<span class="built_in">max_element</span>(f[n] + <span class="number">1</span>, f[n] + n + <span class="number">1</span>);  <span class="comment">// 从【1】 开始的</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure></div>
+
+<p>最长上升子序列</p>
+<p>给定一个长度为N的数列，求数值严格单调递增的子序列的长度最长是多少。</p>
+<p>遇到任何 DP 问题，按这个框架思考：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">1. 状态表示</span><br><span class="line">   - f[i] 表示什么？ 以 第 i 位 结尾的 最长上升子序列的长度</span><br><span class="line">   - 集合是什么？（所有满足某条件的方案）</span><br><span class="line">        所有以 第 i 位 结尾的上升子序列的集合</span><br><span class="line">   - 属性是什么？（ max 上升子序列长度 ）</span><br><span class="line"></span><br><span class="line">2. 状态转移</span><br><span class="line">   - 如何划分子问题 集合划分</span><br><span class="line">        从 第 0~i-1 位 转移到 i</span><br><span class="line">   - 转移方程是什么？</span><br><span class="line">        for(int j = 1;j&lt;i;j++)</span><br><span class="line">        if(a[i] &gt; a[j])</span><br><span class="line">            f[i] =  max(f[i], f[j] +1)</span><br><span class="line"></span><br><span class="line">3. 初始化</span><br><span class="line">   - 边界条件是什么？</span><br><span class="line">   - f[0][0] 等于多少？</span><br><span class="line"></span><br><span class="line">4. 优化</span><br><span class="line">   - 能否滚动数组？</span><br><span class="line">   - 枚举顺序有什么要求？</span><br></pre></td></tr></table></figure></div>
+
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1010</span>;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> a[N], f[N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++){</span><br><span class="line">            cin &gt;&gt; a[i];</span><br><span class="line">            f[i] = <span class="number">1</span>; <span class="comment">// 初始化 为 1 ，最差也是自身一个</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt; i; j++)</span><br><span class="line">            <span class="keyword">if</span>(a[i] &gt; a[j]){</span><br><span class="line">                f[i] = <span class="built_in">max</span>(f[i], f[j] <span class="number">+1</span>);</span><br><span class="line">            }</span><br><span class="line">    cout &lt;&lt; *<span class="built_in">max_element</span>(f + <span class="number">1</span>, f + n + <span class="number">1</span>);  <span class="comment">// 从【1】 开始的</span></span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>怎么把最长序列保存下来？<br>存储每一个是怎么转移过来的就可以</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1010</span>;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> a[N], f[N],g[N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++){</span><br><span class="line">            cin &gt;&gt; a[i];</span><br><span class="line">            f[i] = <span class="number">1</span>; <span class="comment">// 初始化 为 1 ，最差也是自身一个</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt; i; j++)</span><br><span class="line">            <span class="keyword">if</span>(a[i] &gt; a[j]){</span><br><span class="line">                f[i] = <span class="built_in">max</span>(f[i], f[j] <span class="number">+1</span>);</span><br><span class="line">                <span class="keyword">if</span>(f[i] &lt; f[j] <span class="number">+1</span>)</span><br><span class="line">                f[i] = f[j]<span class="number">+1</span>;</span><br><span class="line">                g[i] = j;</span><br><span class="line">            }</span><br><span class="line">    <span class="type">int</span> k =<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i =<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">        <span class="keyword">if</span>(f[k] &lt; f[i])</span><br><span class="line">         k = i;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; *<span class="built_in">max_element</span>(f + <span class="number">1</span>, f + n + <span class="number">1</span>);  <span class="comment">// 从【1】 开始的</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>;i&lt;f[k];i++){ <span class="comment">// 这是逆序最长序列的输出</span></span><br><span class="line">        <span class="built_in">print</span>(a[k])</span><br><span class="line">        k = g[k];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+
+<p>最长公共子序列</p>
+<p>// 注意容易混淆的一点<br>这里是 str1 前 i 位 和  str2 中前 j 位<br>并不一定是 是以 第 i 位结尾和以第j位结尾的<br>所有下面分四种情况可以 从 f[i-1,j] 转移，即 当前这两个字符不用（至少丢一个），看之前最优是多少<br>比如<br>情况 1️⃣：不用 str1[i]<br>f[i - 1][j]</p>
+<p>👉 意思：</p>
+<p>把 str1[i] 扔掉<br>用 str1[1..i-1] 和 str2[1..j]</p>
+<ol>
+<li><p>状态表示</p>
+<ul>
+<li>f[i，j] 表示什么？  str1 前 i 位 和  str2 中前 j 位 的 最长公共子序列长度</li>
+<li>集合是什么？（所有满足某条件的方案）<ul>
+<li>str1 前 i 位 和  str2 中前 j 位 的公共子序列的集合</li>
+</ul>
+</li>
+<li>属性是什么？（ max 公共子序列长度 ）</li>
+</ul>
+</li>
+<li><p>状态转移</p>
+<ul>
+<li><p>如何划分子问题 集合划分 // str1[i] str2[j] 是否包含在子序列当中<br>  四种情况 str1[i] str2[j]  -&gt;f[i-1,j-1] +1<br>  ！str1[i] str2[j] -&gt;f[i-1,j]<br>  str1[i] !str2[j] -&gt; f[i,j-1]<br>  !str1[i] !str2[j] -&gt; f[i-1,j-1]<br>   可以看出 f[i-1,j-1]是包含在 f[i-1,j] 和 f[i,j-1]中 的可以忽略</p>
+</li>
+<li><p>转移方程是什么？</p>
+</li>
+</ul>
+</li>
+</ol>
+<p> for (int i = 1; i &lt;= n; i++)<br>        for (int j = 1; j &lt;= m; j++) {<br>            f[i][j] = max(f[i - 1][j], f[i][j - 1]); // 默认先至少丢一个，看前一个的最优解<br>            if (str1[i-1] == str2[j-1])  // 注意 string 是0-base<br>                f[i][j] = max(f[i][j], f[i - 1][j - 1] + 1); // 如果当前i j 字符相等，则可以+1 转移<br>        }</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1010</span>;</span><br><span class="line"><span class="type">int</span> f[N][N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="type">int</span> n, m;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    string str1, str2;</span><br><span class="line">    cin &gt;&gt; str1 &gt;&gt; str2;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= m; j++) {</span><br><span class="line">            f[i][j] = <span class="built_in">max</span>(f[i - <span class="number">1</span>][j], f[i][j - <span class="number">1</span>]);</span><br><span class="line">            <span class="keyword">if</span> (str1[i<span class="number">-1</span>] == str2[j<span class="number">-1</span>])</span><br><span class="line">                f[i][j] = <span class="built_in">max</span>(f[i][j], f[i - <span class="number">1</span>][j - <span class="number">1</span>] + <span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; f[n][m];</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>编辑距离   -&gt; to finish</p>
+<p>我没做，小虾 你帮我补充下</p>
+<h3 id="区间-dp"><a href="#区间-dp" class="headerlink" title="区间 dp"></a>区间 dp</h3><p>石子合并<br>不同的合并顺序，体力代价不同</p>
+<p>状态 表示的是一个区间</p>
+<ol>
+<li><p>状态表示</p>
+<ul>
+<li>f[i，j] 表示什么？  第i堆石子到 第j堆石子 这个区间</li>
+<li>集合是什么？（所有满足某条件的方案）<ul>
+<li>所有将 第 i 堆石子 到 第j 堆石子合并成一堆石子的合并方式的集合</li>
+</ul>
+</li>
+<li>属性是什么？（总体力代价最小值 ）</li>
+</ul>
+</li>
+<li><p>状态转移</p>
+<ul>
+<li>如何划分子问题 集合划分<ul>
+<li>以最后一次合并的分界线 分类</li>
+</ul>
+</li>
+<li>转移方程是什么？<br>   f[i,j] = f[i,k] + f[k+1,j] + s[j]-s[i-1] // 前缀和<br>   k 从 i ~ j-1 // k 可以取 i 此时是 i 与 i+1~j<br>   k 不可以取 j，至少保证右侧不为空</li>
+</ul>
+</li>
+</ol>
+<p>枚举顺序：按区间长度 从小到大</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">310</span>;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> s[N];</span><br><span class="line"><span class="type">int</span> f[N][N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        cin &gt;&gt; s[i];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        s[i] += s[i - <span class="number">1</span>];  <span class="comment">// prefix_sum</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> len = <span class="number">2</span>; len &lt;= n; len++) {</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i + len - <span class="number">1</span> &lt;= n; i++) {</span><br><span class="line">            <span class="type">int</span> l = i, r = i + len - <span class="number">1</span>;</span><br><span class="line">            f[l][r] = INF;                 <span class="comment">// 记得初始化</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> k = l; k &lt; r; k++) {  <span class="comment">// k 可以取 l</span></span><br><span class="line">                f[l][r] = <span class="built_in">min</span>(f[l][r], f[l][k] + f[k + <span class="number">1</span>][r] + s[r] - s[l - <span class="number">1</span>]);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    cout &lt;&lt; f[<span class="number">1</span>][n];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>区间长度 一般 从小到大循环<br>然后再循环 区间的左端点<br>再枚举决策</p>
+<h3 id="计数类-dp"><a href="#计数类-dp" class="headerlink" title="计数类 dp"></a>计数类 dp</h3><p>整数划分 -&gt; to finish</p>
+<p>我没听，小虾 你帮我补充下</p>
+<h3 id="数位统计-dp"><a href="#数位统计-dp" class="headerlink" title="数位统计 dp"></a>数位统计 dp</h3><p>分情况讨论！</p>
+<p>[a,b] 0~9</p>
+<p>若能实现 count(n,x) 1~n 中 x 出现的次数</p>
+<p>则 ans = count(b,x) - count(a-1,x) </p>
+<p>以 x =1 为例<br>对于一个 7 位 数字<br>分别求出 1 在 每一个位上出现的次数</p>
+<p>例如 在 第 4 位上，分情况讨论=&gt;<br>1 &lt;= xxx1yyy &lt;=abcdefg<br>(1) xxx = 000<del class="mask">abc-1, yyy = 000</del>999 =&gt; abc * 1000<br>(2) xxx= abc,<br>    (2.1) d&lt;1, abc1yyy &gt;abc0efg =&gt; 0<br>    (2.2) d=1, yyy=000<del class="mask">efg =&gt; efg +1<br>    (2.2) d&gt;1, yyy=000</del>999 =&gt; 1000</p>
+<p>再考虑边界情况</p>
+<p>当枚举 0 的 时候，需要从 100~abc-1 // 不能有前导0<br>因为，如果从 001 开始取，那就不是 第 4位了，而是第2 位</p>
+<p>核心思路（非常重要）</p>
+<p>我们定义一个函数：</p>
+<p>count(n, x) = 1 ~ n 中，数字 x 出现的次数</p>
+<p>那么答案就是：</p>
+<p>count(b, x) - count(a-1, x)</p>
+<p>👉 所以问题变成：怎么求 count(n, x)</p>
+<p>🔍 按位拆分（重点）</p>
+<p>以某一位（比如第 k 位）为例：</p>
+<p>把 n 拆成三部分：</p>
+<p>高位 + 当前位 + 低位</p>
+<p>例如：n = abcdefg<br>        ↑   ↑   ↑<br>      高位 当前 低位<br>🧩 对每一位统计 x 的贡献</p>
+<p>设：</p>
+<p>high = n / (10^(k+1))<br>cur = 当前位<br>low = n % (10^k)<br>🎯 分类讨论（通用公式）</p>
+<p>对于 x ≠ 0：</p>
+<p>情况：</p>
+<p>cur &gt; x</p>
+<p>(high + 1) * 10^k</p>
+<p>cur == x</p>
+<p>high * 10^k + (low + 1)</p>
+<p>cur &lt; x</p>
+<p>high * 10^k<br>❗特殊：x = 0（重点坑点）</p>
+<p>👉 不能统计前导 0！</p>
+<p>所以：</p>
+<p>high 需要减 1<br>情况：</p>
+<p>cur &gt; 0</p>
+<p>(high - 1 + 1) * 10^k = high * 10^k</p>
+<p>cur == 0</p>
+<p>(high - 1) * 10^k + (low + 1)</p>
+<p>cur &lt; 0（不存在）</p>
+<p>(high - 1) * 10^k</p>
+<p>👉 本质就是：最高位不能是 0</p>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">i64 <span class="title">count</span><span class="params">(i64 n, <span class="type">int</span> x)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; nums;</span><br><span class="line">    <span class="keyword">while</span> (n) {</span><br><span class="line">        nums.<span class="built_in">push_back</span>(n % <span class="number">10</span>);</span><br><span class="line">        n /= <span class="number">10</span>;</span><br><span class="line">    }</span><br><span class="line">    i64 res = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = len - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) {</span><br><span class="line">        i64 pow10 = <span class="built_in">pow</span>(<span class="number">10</span>, i);</span><br><span class="line">        i64 high = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = len - <span class="number">1</span>; j &gt; i; j--)</span><br><span class="line">            high = high * <span class="number">10</span> + nums[j];</span><br><span class="line">        <span class="type">int</span> cur = nums[i];</span><br><span class="line">        <span class="type">long</span> <span class="type">long</span> low = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = i - <span class="number">1</span>; j &gt;= <span class="number">0</span>; j--)</span><br><span class="line">            low = low * <span class="number">10</span> + nums[j];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (x != <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">if</span> (cur &gt; x)</span><br><span class="line">                res += (high + <span class="number">1</span>) * pow10;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (cur == x)</span><br><span class="line">                res += high* pow10 + (low + <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                res += high * pow10;</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            <span class="keyword">if</span> (high == <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span> (cur &gt; <span class="number">0</span>)</span><br><span class="line">                res += high * pow10;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                res += (high - <span class="number">1</span>) * pow10 + (low + <span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    i64 a, b;</span><br><span class="line">    <span class="keyword">while</span> (cin &gt;&gt; a &gt;&gt; b, a || b) {</span><br><span class="line">        <span class="keyword">if</span> (a &gt; b)</span><br><span class="line">            <span class="built_in">swap</span>(a, b);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">9</span>; i++) {</span><br><span class="line">            cout &lt;&lt; <span class="built_in">count</span>(b, i) - <span class="built_in">count</span>(a - <span class="number">1</span>, i) &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">        }</span><br><span class="line">        cout &lt;&lt; <span class="string">'\n'</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+
+<h3 id="状态压缩-dp"><a href="#状态压缩-dp" class="headerlink" title="状态压缩 dp"></a>状态压缩 dp</h3><p>核心思想：用一个整数来表示一种状态</p>
+<p>蒙德里安的梦想<br>思路：当横向摆好后，纵向依次放入即可<br>所以，总方案数只与横向摆放方案数有关</p>
+<p>用 f[i][j] 表示 第 i 列，j （10010）表示该列 第1、4行拜访了横木块的右端点<br>f[i][j] 从 f[i-1][k] 转移需要满足以下两点要求</p>
+<ol>
+<li>j&amp; k== 0// 不能有冲突</li>
+<li>j | k 不能有奇数个连续的0 // 竖木块无法填充</li>
+</ol>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">12</span>, M = <span class="number">1</span> &lt;&lt; N;</span><br><span class="line"><span class="type">int</span> n, m;</span><br><span class="line">i64 f[N][M];</span><br><span class="line"><span class="type">bool</span> st[M];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="type">int</span> n, m;</span><br><span class="line">    <span class="keyword">while</span> (cin &gt;&gt; n &gt;&gt; m, n || m) {</span><br><span class="line">        <span class="built_in">memset</span>(f, <span class="number">0</span>, <span class="keyword">sizeof</span> f);</span><br><span class="line">        <span class="comment">// 预处理 0000~ 1111 所有数，中间是否存在连续奇数的0</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1</span> &lt;&lt; n; i++) {</span><br><span class="line">            st[i] = <span class="literal">true</span>;</span><br><span class="line">            <span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j++) {</span><br><span class="line">                <span class="keyword">if</span> (i &gt;&gt; j &amp; <span class="number">1</span>) {</span><br><span class="line">                    <span class="keyword">if</span> (cnt &amp; <span class="number">1</span>)</span><br><span class="line">                        st[i] = <span class="literal">false</span>;</span><br><span class="line">                    cnt = <span class="number">0</span>;</span><br><span class="line">                } <span class="keyword">else</span></span><br><span class="line">                    cnt++;  <span class="comment">// 统计连续 0</span></span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">if</span> (cnt &amp; <span class="number">1</span>)</span><br><span class="line">                st[i] = <span class="literal">false</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        f[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; i++)</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; <span class="number">1</span> &lt;&lt; n; j++)</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">0</span>; k &lt; <span class="number">1</span> &lt;&lt; n; k++)</span><br><span class="line">                    <span class="keyword">if</span> ((j &amp; k) == <span class="number">0</span> &amp;&amp; st[j | k])</span><br><span class="line">                        f[i][j] += f[i - <span class="number">1</span>][k];</span><br><span class="line"></span><br><span class="line">        cout &lt;&lt; f[m][<span class="number">0</span>]&lt;&lt;<span class="string">'\n'</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+
+
+<ol>
+<li><p>状态表示</p>
+<ul>
+<li><p>f[i，j] 表示什么？  </p>
+</li>
+<li><p>所有从 0 走到j，走过的所有点存在 i 的路径最小值</p>
+</li>
+<li><p>集合是什么？（所有满足某条件的方案）<br>所有从 0 走到j，走过的所有点存在 i 的所有路径<br>i 是一种状态压缩 ，比如 i=(10010)2 表示 第0个点 和 第3个点走过了</p>
+</li>
+<li><p>属性是什么？（总路径权重最小值 ）</p>
+</li>
+</ul>
+</li>
+<li><p>状态转移</p>
+<ul>
+<li>如何划分子问题 集合划分<br> 以倒数第二点划分 0 -&gt;k -&gt;j</li>
+<li>转移方程是什么？</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>f[i - {j},k] + a[k][j]</li>
+</ul>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">20</span>,M = <span class="number">1</span>&lt;&lt;N;</span><br><span class="line"><span class="type">int</span> n ;</span><br><span class="line"><span class="type">int</span> w [N][N];</span><br><span class="line"><span class="type">int</span> f[M][N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>{</span><br><span class="line">    cin &gt;&gt;n;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i =<span class="number">0</span>;i&lt;n;i++)</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j =<span class="number">0</span>;j&lt;n;j++)</span><br><span class="line">    cin &gt;&gt;w[i][j];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memset</span>(f,inf,<span class="keyword">sizeof</span> f);</span><br><span class="line">    f[<span class="number">1</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i =<span class="number">0</span>;i&lt;<span class="number">1</span> &lt;&lt;n;i++){</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span> ;j&lt;n;j++){</span><br><span class="line">            <span class="keyword">if</span>(i &gt;&gt;j &amp;<span class="number">1</span>) <span class="comment">// 当前 j 在 i 里</span></span><br><span class="line">            {</span><br><span class="line">                <span class="keyword">for</span>(k = <span class="number">0</span>k&lt;n;k++){</span><br><span class="line">                    <span class="keyword">if</span>(i - (<span class="number">1</span>&lt;&lt;j) &gt;&gt; k&amp;<span class="number">1</span>) <span class="comment">// k 在 i -{j} 里</span></span><br><span class="line">                    {</span><br><span class="line">                        f[i][j] = <span class="built_in">min</span>(f[i][j],f[i - (<span class="number">1</span>&lt;&lt;j)][k] + w[k][j]);</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    cout  &lt;&lt; f[(<span class="number">1</span>&lt;&lt;n)<span class="number">-1</span>][n<span class="number">-1</span>] &lt;&lt;<span class="string">'\n'</span>; <span class="comment">// 所有点都走了 1111 ，共 n-1 条边</span></span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>分布式任务调度</p>
+<p>题意概述<br>N 个任务，每个任务有(Ci，mi，Ui)。每台服务器有CPU上限C、内存上限M。对于K = 1..N，分别求有K台服务器时可获得的最大总价值。</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">struct Task {</span><br><span class="line">    int c, m, v;</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line">int main() {</span><br><span class="line">    int n, c, m;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; c &gt;&gt; m;</span><br><span class="line">    vector&lt;Task&gt; tasks(n);</span><br><span class="line">    for (int i = 0; i &lt; n; i++) {</span><br><span class="line">        cin &gt;&gt; tasks[i].c &gt;&gt; tasks[i].m &gt;&gt; tasks[i].v;</span><br><span class="line">    }</span><br><span class="line">    // 先预处理 哪些 子任务集合 能被 一台服务器 处理</span><br><span class="line">    int S = 1 &lt;&lt; n;  // 1 0 0 0 0 ……  每个任务 选 或 不选，共 2^n 个情况</span><br><span class="line">    vector&lt;int&gt; sumc(S, 0), summ(S, 0), sumv(S, 0);</span><br><span class="line">    vector&lt;bool&gt; ok(S, false);</span><br><span class="line"></span><br><span class="line">    for (int s = 1; s &lt; S; s++)  // 依次遍历  00…… 01 到 11……11 的情况</span><br><span class="line">    {</span><br><span class="line">        int lb = s &amp; -s;            // 最后一个 1 的位置; 比如 s = 10010 ，则 lb = 10</span><br><span class="line">        int i = __builtin_ctz(lb);  // lb 中 0 的个数 ，如 lb = 10 ； i=  1，即第几个任务</span><br><span class="line">        int prev = s ^ lb;          //  prev = s把  最后一个 1  换成0， prev = 10000</span><br><span class="line">        // 在我们遍历 s 的时候，prev 肯定已经被遍历过了，因为 prev 是 s 把最后一位 1 变成0</span><br><span class="line">        sumc[s] = sumc[prev] + tasks[i].c;</span><br><span class="line">        summ[s] = summ[prev] + tasks[i].m;</span><br><span class="line">        sumv[s] = sumv[prev] + tasks[i].v;</span><br><span class="line"></span><br><span class="line">        if (sumc[s] &lt;= c &amp;&amp; summ[s] &lt;= m)  // 一台服务器可以处理</span><br><span class="line">            ok[s] = true;                  // 该子集可以放入以他服务器里</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    int dp[n + 1][S];  // dp[k][s] 用 k 台服务器处理 任务集合 s</span><br><span class="line">    // 转移方程 从 dp[k-1][s],即 k放空</span><br><span class="line">    // 从 dp[k-1][s^sub] + val[sub] ,即 第 k 台服务器处理 子集 sub，前提 sub 可以被放到一台服务器上</span><br><span class="line">    memset(dp, 0, sizeof dp);</span><br><span class="line"></span><br><span class="line">    for (int k = 1; k &lt;= n; k++) {</span><br><span class="line">        for (int s = 0; s &lt; S; s++) {</span><br><span class="line">            dp[k][s] = dp[k - 1][s];  // 这台服务器不放任何任务</span><br><span class="line">            for (int sub = s; sub;</span><br><span class="line">                 sub = (sub - 1) &amp; s) {  // 从 大到小 遍历，用 k-1 的状态 且 贪心思想 一台服务器尽可能放多的任务</span><br><span class="line">                if (ok[sub])</span><br><span class="line">                    dp[k][s] = max(dp[k][s], dp[k - 1][s ^ sub] + sumv[sub]);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    for (int k = 1; k &lt;= n; ++k) {</span><br><span class="line">        cout &lt;&lt; dp[k][S - 1] &lt;&lt; '\n';</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>几个关键点 </p>
+<p>lb = s&amp; -x<br>i = __builtin_ctz(lb);<br>prev = s^ sub;</p>
+<p>从大到小遍历 s 的sub： sub = s;sub;sub = (sub-1) &amp; s</p>
+<p>s = 1101<br>sub = 1101<br>sub = 1100 &amp; 1101 = 1100<br>sub = 1001 &amp; 1101 = 1001</p>
+<p>// 保证是 比上一次少 1 且 在 s 范围 内（表示的子集里）</p>
+<h3 id="树形-dp"><a href="#树形-dp" class="headerlink" title="树形 dp"></a>树形 dp</h3><p>没有(直接)上司的舞会</p>
+<ol>
+<li><p>状态表示</p>
+<ul>
+<li>f[u,0] / f[u,1] 表示什么？<br> f[u][0] 以 u 为 根的子树，且不包含 U<br> f[u][1] 以 u 为 根的子树，且包含 U</li>
+<li>集合是什么？（所有满足某条件的方案）<br> 以 u 为 根的子树</li>
+<li>属性是什么？ (Max H)</li>
+</ul>
+</li>
+<li><p>状态转移</p>
+<ul>
+<li><p>如何划分子问题 集合划分<br> f[u][0，1] 以 u 为 根的子树<br> f[s_i][0,1] u的 各个子节点 s_i  </p>
+</li>
+<li><p>转移方程是什么？</p>
+</li>
+<li><p>f[u][0] = sum_i (max(f[si,0],f[si,1]))</p>
+</li>
+<li><p>// 不选 u 节点，则其所有子节点 最大值之和</p>
+</li>
+<li><p>f[u][1] =sum_i (f[si,0])</p>
+</li>
+<li><p>// 选 u 节点，则其所有子节点 不选子节点 之和</p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">6010</span>;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> hp[N];</span><br><span class="line"><span class="type">int</span> h[N], e[N], ne[N], idx;</span><br><span class="line"><span class="type">int</span> f[N][<span class="number">2</span>];</span><br><span class="line"><span class="type">bool</span> has_fa[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">add</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> v)</span> </span>{</span><br><span class="line">    e[idx] = v, ne[idx] = h[u], h[u] = idx++;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> u)</span> </span>{</span><br><span class="line">    f[u][<span class="number">1</span>] = hp[u];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = h[u]; i != <span class="number">-1</span>; i = ne[i]) {</span><br><span class="line">        <span class="type">int</span> j = e[i];</span><br><span class="line">        <span class="built_in">dfs</span>(j);</span><br><span class="line">        f[u][<span class="number">0</span>] += <span class="built_in">max</span>(f[j][<span class="number">0</span>], f[j][<span class="number">1</span>]);  <span class="comment">// sum max(f[s_i][0],f[s_i][1])</span></span><br><span class="line">        f[u][<span class="number">1</span>] += f[j][<span class="number">0</span>];</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        cin &gt;&gt; hp[i];</span><br><span class="line">    <span class="built_in">memset</span>(h, <span class="number">-1</span>, <span class="keyword">sizeof</span> h);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i++) {</span><br><span class="line">        <span class="type">int</span> u, v;</span><br><span class="line">        cin &gt;&gt; u &gt;&gt; v;</span><br><span class="line">        has_fa[u] = <span class="literal">true</span>;</span><br><span class="line">        <span class="built_in">add</span>(v, u);</span><br><span class="line">    }</span><br><span class="line">    <span class="type">int</span> root = <span class="number">1</span>;  <span class="comment">// 找到根节点</span></span><br><span class="line">    <span class="keyword">while</span> (has_fa[root])</span><br><span class="line">        root++;</span><br><span class="line">    <span class="built_in">dfs</span>(root);</span><br><span class="line">    cout &lt;&lt; <span class="built_in">max</span>(f[root][<span class="number">0</span>], f[root][<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+
+<h3 id="记忆化搜素"><a href="#记忆化搜素" class="headerlink" title="记忆化搜素"></a>记忆化搜素</h3><p>递归实现 dp；</p>
+<p>滑雪</p>
+<ol>
+<li><p>状态表示</p>
+<ul>
+<li>f[i,j]表示什么？</li>
+<li>集合是什么？（所有满足某条件的方案）<br> 所有从 （i，j)开始滑的路径</li>
+<li>属性是什么？ (Max )</li>
+</ul>
+</li>
+<li><p>状态转移</p>
+<ul>
+<li><p>如何划分子问题 集合划分</p>
+</li>
+<li><p>从一个点出发，可以向 上下左右 四个方向滑动，滑动的前提 当前高度 &gt; 要取的位置<br> 如果可以向右滑动 f[i][j] = f[i][j+1]+1;<br> 所有可以取的前提取max；</p>
+</li>
+<li><p>转移方程是什么？</p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="code-container" data-rel="Cpp"><figure class="iseeu highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">310</span>;</span><br><span class="line"><span class="type">int</span> n, m;</span><br><span class="line"><span class="type">int</span> h[N][N];</span><br><span class="line"><span class="type">int</span> f[N][N];</span><br><span class="line"><span class="type">int</span> dx[<span class="number">4</span>] = {<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>, <span class="number">1</span>}, dy[<span class="number">4</span>] = {<span class="number">1</span>, <span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>};</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">dp</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>{</span><br><span class="line">    <span class="type">int</span>&amp; v = f[x][y]; <span class="comment">// 为什么叫记忆化搜索？ </span></span><br><span class="line">    <span class="keyword">if</span> (v != <span class="number">-1</span>) <span class="comment">// 如果这里之前算过了 !=-1，就返回 这个值即可</span></span><br><span class="line">        <span class="keyword">return</span> v;</span><br><span class="line">    v = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) {</span><br><span class="line">        <span class="type">int</span> a = x + dx[i], b = y + dy[i];</span><br><span class="line">        <span class="keyword">if</span> (a &gt;= <span class="number">1</span> &amp;&amp; a &lt;= n &amp;&amp; b &gt;= <span class="number">1</span> &amp;&amp; b &lt;= m &amp;&amp; h[x][y] &gt; h[a][b])</span><br><span class="line">            v = <span class="built_in">max</span>(v, <span class="built_in">dp</span>(a, b)<span class="number">+1</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> v;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= m; j++)</span><br><span class="line">            cin &gt;&gt; h[i][j];</span><br><span class="line">    <span class="built_in">memset</span>(f, <span class="number">-1</span>, <span class="keyword">sizeof</span> f);</span><br><span class="line">    <span class="type">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= m; j++)</span><br><span class="line">            res = <span class="built_in">max</span>(res, <span class="built_in">dp</span>(i, j));  <span class="comment">// 每个点出发的结果，取最大值</span></span><br><span class="line">    cout &lt;&lt; res;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+
+<p>数位统计，可以放弃了，太麻烦了 =_= 有时间再看吧</p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 算法笔记：AcWing - 动态规划（其他DP模型）</li>
+        <li><strong>Author:</strong> Ginkgo</li>
+        <li><strong>Created at
+                :</strong> 2026-04-11 14:30:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2026-04-12 11:00:17
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://g1nkgo7.github.io/2026/04/11/算法笔记-AcWing-动态规划（其他dp模型）/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/algorithm/">#algorithm</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2026/04/11/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98%EF%BC%89/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">算法笔记：AcWing - 动态规划（背包问题）</span>
+						<span class="post-nav-item">Prev posts</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/04/11/%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0-AcWing-%E6%90%9C%E7%B4%A2%E4%B8%8E%E5%9B%BE%E8%AE%BA/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">算法笔记：AcWing - 搜索与图论</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="gitalk-container"></div>
+    <script data-swup-reload-script
+            src="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js"></script>
+    <script data-swup-reload-script>
+        (function() {
+            const startPath = location.pathname;
+            const startTime = Date.now();
+            const retryDelay = 200;
+            const retryLimit = 5000;
+
+            const runGitalk = () => {
+                if (location.pathname !== startPath) {
+                    return;
+                }
+
+                const container = document.getElementById('gitalk-container');
+                if (!container || typeof Gitalk === 'undefined') {
+                    if (Date.now() - startTime < retryLimit) {
+                        setTimeout(runGitalk, retryDelay);
+                    }
+                    return;
+                }
+
+                container.innerHTML = '';
+
+                let pageKey = decodeURI(location.pathname);
+                const maxLength = 50;
+                if (pageKey.length > maxLength) {
+                    pageKey = pageKey.substring(0, maxLength - 3) + '...';
+                }
+
+                try {
+                    new Gitalk({
+                        clientID: 'Ov23liQqIUZL7VlfwyIl',
+                        clientSecret: 'd5280a064abda06200c1597ac2085b2b6c9d35ff',
+                        repo: 'Gitalk',
+                        owner: 'G1nkgo7',
+                        admin: ['G1nkgo7'],
+                        id: pageKey,
+                        language: 'en',
+                        proxy: 'https://cors-server-ecru.vercel.app/github_access_token'
+                    }).render(container);
+                } catch (e) {
+                    window.Gitalk = null;
+                }
+            };
+
+            runGitalk();
+        })();
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">算法笔记：AcWing - 动态规划（其他DP模型）</div>
+		<ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7-dp"><span class="nav-text">线性 dp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E9%97%B4-dp"><span class="nav-text">区间 dp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E6%95%B0%E7%B1%BB-dp"><span class="nav-text">计数类 dp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E4%BD%8D%E7%BB%9F%E8%AE%A1-dp"><span class="nav-text">数位统计 dp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E5%8E%8B%E7%BC%A9-dp"><span class="nav-text">状态压缩 dp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%91%E5%BD%A2-dp"><span class="nav-text">树形 dp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%B0%E5%BF%86%E5%8C%96%E6%90%9C%E7%B4%A0"><span class="nav-text">记忆化搜素</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ginkgo</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        12 posts in total
+                    </span>
+                    
+                        <span>
+                            26.1k words in total
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.9.0</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+            
+                
+        
+                
+        
+                
+
+                    
+                        <script data-swup-reload-script>window.addEventListener("load",function(){setTimeout(function(){if(window.MathJax){MathJax.typesetPromise().catch(e=>console.log("MathJax error:",e))}},500)});document.addEventListener("swup:contentReplaced",function(){if(window.MathJax){MathJax.typesetPromise().catch(e=>console.log("MathJax error:",e))}})</script>
+                    
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container" role="dialog" aria-modal="true" aria-label="Image viewer">
+	<button class="image-viewer-close" type="button" aria-label="Close">
+		<i class="fa-solid fa-xmark"></i>
+	</button>
+	<button class="image-viewer-prev" type="button" aria-label="Prev">
+		<i class="fa-solid fa-chevron-left"></i>
+	</button>
+	<div class="image-viewer-frame">
+		<img src="" alt="">
+	</div>
+	<div class="image-viewer-exif-panel hidden absolute left-1/2 bottom-20 -translate-x-1/2 w-[min(92vw,420px)] max-h-[60vh] overflow-hidden rounded-2xl bg-background-color-transparent-80 p-4 text-left shadow-redefine-flat backdrop-blur-md" role="dialog" aria-label="EXIF" aria-hidden="true">
+		<div class="flex items-center justify-between mb-3">
+			<span class="text-sm font-semibold text-first-text-color">EXIF</span>
+			<button class="image-viewer-exif-close flex h-8 w-8 items-center justify-center rounded-full bg-background-color-transparent-80 text-first-text-color transition hover:bg-background-color-transparent-40" type="button" aria-label="Close">
+				<i class="fa-solid fa-xmark text-[0.65rem]"></i>
+			</button>
+		</div>
+		<div class="image-viewer-exif-cards grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1 scrollbar-hide"></div>
+		<template class="image-viewer-exif-card-template">
+			<div class="rounded-lg bg-background-color-transparent-40 px-3 py-2">
+				<div class="image-viewer-exif-card-header flex items-center gap-2 mb-1">
+					<i class="image-viewer-exif-card-icon fa-solid fa-circle-info text-xs text-third-text-color"></i>
+					<div class="image-viewer-exif-card-title text-xs font-semibold text-first-text-color"></div>
+				</div>
+				<div class="image-viewer-exif-card-items flex flex-col gap-1"></div>
+			</div>
+		</template>
+	</div>
+	<button class="image-viewer-exif-toggle flex items-center gap-2 hidden absolute left-1/2 bottom-6 -translate-x-1/2 rounded-full border border-border-color bg-background-color-transparent-80 px-4 py-2 text-first-text-color backdrop-blur-md transition hover:bg-background-color-transparent-40" type="button" aria-label="EXIF" aria-expanded="false">
+		<i class="fa-solid fa-circle-info text-xs"></i>
+		<span class="text-xs font-semibold uppercase tracking-wider">EXIF</span>
+	</button>
+	<button class="image-viewer-next" type="button" aria-label="Next">
+		<i class="fa-solid fa-chevron-right"></i>
+	</button>
+</div>
+
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Search..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    window.swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+
+    window.dispatchEvent(
+        new CustomEvent("redefine:swup:ready", {
+            detail: {
+                swup: window.swup,
+            },
+        }),
+    );
+</script>
+
+
+
+
+	
+<script src="/js/build/main.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/minimasonry.min.js" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+
+	
+	<div id="aplayer"></div>
+
+<script src="/js/build/libs/APlayer.min.js"></script>
+
+
+<script src="/js/build/plugins/aplayer.js"></script>
+
+
+	
+</body>
+
+</html>
