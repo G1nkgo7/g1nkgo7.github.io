@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="">
+    
+    
+    <meta name="author" content="Ginkgo">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2026/04/24/旧经新练-agent篇/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+        
+        <meta name="description" content="从 Agent 基本概念到主流设计模式（ReAct &#x2F; Plan &amp; Solve &#x2F; ReWoo &#x2F; LLMCompiler &#x2F; Reflection &#x2F; LATS &#x2F; Self-Discover），理解&#39;决策 + 执行&#39;闭环体系的核心思想与面试考点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="旧经新练：Agent 篇">
+<meta property="og:url" content="http://example.com/2026/04/24/%E6%97%A7%E7%BB%8F%E6%96%B0%E7%BB%83-Agent%E7%AF%87/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="从 Agent 基本概念到主流设计模式（ReAct &#x2F; Plan &amp; Solve &#x2F; ReWoo &#x2F; LLMCompiler &#x2F; Reflection &#x2F; LATS &#x2F; Self-Discover），理解&#39;决策 + 执行&#39;闭环体系的核心思想与面试考点">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-04-24T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-26T13:32:38.918Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="interview">
+<meta property="article:tag" content="llm">
+<meta property="article:tag" content="nlp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.ico" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+    <meta name="theme-color" content="#927efb">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <!--- Page Info-->
+    
+    <title>
+        
+            旧经新练：Agent 篇 | Ginkgo&#39;s Blog
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+        
+            
+    
+            
+    
+            
+                
+                    <link rel="stylesheet" href="/fonts/fonts.css" />
+                
+    
+            
+                
+                    <style>.ml13, .preloader .ml13 { font-family: "WLJH-w800", sans-serif !important; font-weight: 800 !important; } #subtitle, .home-banner #subtitle { font-family: "YouYuan", "Zhi Mang Xing", sans-serif !important; }</style>
+                
+    
+            
+                
+                    <script data-swup-reload-script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+                
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+        <link href="/fonts/fonts.css" rel="stylesheet">
+        <style>
+            .preloader .ml13 {
+                font-family: 'WLJH-w800', 'Chillax-Variable', sans-serif !important;
+            }
+
+            #subtitle,
+            #subtitle + .typed-cursor {
+                font-family: 'YouYuan', '幼圆', 'Microsoft YaHei', sans-serif !important;
+            }
+        </style>
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+        
+<script src="/js/build/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"en","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":true,"link_icon":true,"delete_mask":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":["True love prevails."]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"atom-one-light","dark":"atom-one-dark"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#927efb","secondary":null,"default_mode":"dark"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":true,"custom_message":"岁月朝暮并往 愿你行至天光"},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":null},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/The_Cliffs_1.jpg","dark":"/images/The_Cliffs_6.jpg"},"title":"Ginkgo Forever","subtitle":{"text":["闲言碎语加载中……"],"hitokoto":{"enable":true,"show_author":false,"api":"https://v1.hitokoto.cn?max_length=20"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#fff"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.8rem","line_height":1.2},"custom_font":{"enable":false,"family":"STXINGKA","url":"/fonts/fonts.css"},"social_links":{"enable":false,"style":"default","links":[{"icon":"fa-brands fa-github","url":null},{"icon":"fa-brands fa-twitter","url":null},{"icon":"fa-solid fa-at","url":"you@example.com"},{"icon":"fa-brands fa-telegram","url":null},{"icon":"/images/custom-icon.svg","url":null}],"qrs":[{"icon":"fa-brands fa-weixin","qr":null},{"icon":"/images/custom-icon.svg","qr":null}]}},"plugins":{"feed":{"enable":true},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"梨花香","artist":"佚名","url":"/music/source/梨花香.mp3","cover":"/music/image/梨花香.jpg","lrc":"/music/lrc/梨花香.lrc"}]},"mermaid":{"enable":false,"version":"11.4.1","theme":{"light":"default","dark":"dark"}}},"version":"2.9.0","navbar":{"auto_hide":true,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-solid fa-house"},"Archives":{"path":"/archives","icon":"fa-solid fa-archive"},"About":{"path":"/about","icon":"fa-solid fa-user"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur","masonry":{"batch_size":12,"initial_batch_size":24}},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footer":{"runtime":true,"icon":"<i class=\"fa-solid fa-heart fa-beat\" style=\"--fa-animation-duration: 0.5s; color: #f54545\"></i>","start":"2022/8/17 11:45:14","statistics":true,"customize":null,"icp":{"enable":false,"number":null,"url":null}},"footerStart":"2022/8/17 11:45:14","mermaid":{"style":{"light":"default","dark":"dark"}}};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.i18n = {"search":"Search...","toc":"On this page","prev":"Prev","next":"Next","prev_posts":"Prev posts","next_posts":"Next posts","page":"Page %d","recent_posts":"Recent Posts","share":"Share","powered_by":"POWERED BY %s","theme":"THEME","rss_feed":"RSS Feed","category":"Category","categories":"Categories","tag":"Tag","tags":"Tags","post":"Post","posts":"Posts","tagcloud":"Tag Cloud","comment":"Comment","comments":"Comments","home":"Home","archive":"Archive","archives":"Archives","top":"TOP","sticky":"Sticky","go-back-home":"Go Back Home","masonry_loading":"Loading photos...","image_viewer":"Image viewer","close":"Close","exif":{"title":"EXIF","cards":{"camera":"Camera","lens":"Lens","exposure":"Exposure","other":"Other"},"fields":{"make":"Brand","model":"Model","date_taken":"Date taken","lens_model":"Lens","focal_length":"Focal length","focus_mode":"Focus mode","shutter":"Shutter","aperture":"Aperture","iso":"ISO","exposure_program":"Exposure program","exposure_compensation":"Exposure compensation","metering_mode":"Metering mode","flash":"Flash","white_balance":"White balance","latitude":"Latitude","longitude":"Longitude","altitude":"Altitude"},"status":{"loading":"Loading...","no_exif":"No EXIF available","library_missing":"EXIF library not loaded","image_source_missing":"Image source unavailable","unavailable":"EXIF unavailable (blocked by CORS or missing metadata)","flag_unavailable":"EXIF unavailable"}},"about":"About","changelog":"Changelog","links":"Links","link":"Link","friends":"Friends","friend":"Friend","timeline":"Timeline","shuoshuo":"Shuoshuo","bookmarks":"Bookmarks","site_uv":"VISITOR COUNT","site_pv":"TOTAL PAGE VIEWS","read_more":"Read more","wordcount":"Words","min2read":"Mins","status":"Status","runtime":"Blog up for","days":"days","hours":"hrs","minutes":"Min","seconds":"Sec","optimized_by":"and Optimized by Evan","rights":"All Rights Reserved","site_posts":"%s posts in total","site_wordcount":"%s words in total","copyright":{"author":"Author","title":"Title","link":"Link","create_time":"Created at","update_time":"Updated at","license_title":"License","license_content":"This work is licensed under %s.","all_rights_reserved":"All Rights Reserved &#169; %s","public_domain":"This work is in the public domain."},"ago":{"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"},"create_time":"Created","update_time":"Updated","expired":"This post is written %s days ago, and the content may not be up to date."};
+    window.data = {"masonry":true};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 8.1.1"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+
+<body>
+	<div class="progress-bar-container">
+	
+	<span class="scroll-progress-bar"></span>
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<link href="/fonts/fonts.css" rel="stylesheet">
+<style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 800;
+        font-family: 'WLJH-w800', 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        岁月朝暮并往 愿你行至天光
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({ loop: true })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [20, 0],
+                translateZ: 0,
+                opacity: [0, 1],
+                filter: ['blur(5px)', 'blur(0px)'],
+                easing: "easeOutExpo",
+                duration: 1200,
+                delay: (el, i) => 300 + 20 * i,
+            })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [0, -20],
+                opacity: [1, 0],
+                filter: ['blur(0px)', 'blur(5px)'],
+                easing: "easeInExpo",
+                duration: 1000,
+                delay: (el, i) => 15 * i,
+                complete: function() {
+                    hidePreloader();
+                }
+            }, '-=700');
+
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ginkgo&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-solid fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-solid fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/about"
+                                        >
+                                    <i class="fa-solid fa-user fa-fw"></i>
+                                    ABOUT
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-solid fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-solid fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/about"
+                        >
+                            <span>
+                                ABOUT
+                            </span>
+                            
+                                <i class="fa-solid fa-user fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">34</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">17</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">20</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			
+			
+			<img src="/images/cover/%E6%97%A7%E7%BB%8F%E6%96%B0%E7%BB%83-Agent%E7%AF%87.png" alt="旧经新练：Agent 篇" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75" />
+			
+			<div class="w-full flex items-center absolute bottom-0 justify-start">
+				<h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">旧经新练：Agent 篇</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/avatar.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">Ginkgo</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">True love prevails.</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-04-24 20:00</span>
+        <span class="mobile">2026-04-24 20:00</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-04-26 21:32:38</span>
+            <span class="mobile">2026-04-26 21:32:38</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E6%97%A7%E7%BB%8F%E6%96%B0%E7%BB%83/">旧经新练</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E6%97%A7%E7%BB%8F%E6%96%B0%E7%BB%83/Agent/">Agent</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/nlp/">nlp</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/llm/">llm</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/interview/">interview</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>7 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<blockquote>
+<p>Agent 不是简单的”套壳 LLM + 给工具”。它是”推理 → 选工具 → 执行 → 观察反馈 → 再推理”的闭环系统。这篇从核心概念出发，串讲工具管理的工程解法，再到 8 种主流设计模式的演进逻辑。</p>
+</blockquote>
+<hr>
+<h3 id="一、什么是-Agent"><a href="#一、什么是-Agent" class="headerlink" title="一、什么是 Agent"></a>一、什么是 Agent</h3><h4 id="核心定义"><a href="#核心定义" class="headerlink" title="核心定义"></a>核心定义</h4><p>Agent 是基于大模型、具备决策能力的系统，能够通过调用工具完成多步任务：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用户目标 → LLM 推理(Planning) → 选工具(Tool Use) → 执行 → 观察反馈 → 再推理(循环)</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>本质</strong>：一个”决策 + 执行”的闭环系统，而不是单次生成。</p>
+<hr>
+<h3 id="二、工具管理：工具多了怎么办"><a href="#二、工具管理：工具多了怎么办" class="headerlink" title="二、工具管理：工具多了怎么办"></a>二、工具管理：工具多了怎么办</h3><h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><p>Function Call 提供的工具数量越多，模型选择工具的准确率反而下降——选择空间大了，误选的概率自然上升。</p>
+<h4 id="解法一：工具路由（Tool-Routing）"><a href="#解法一：工具路由（Tool-Routing）" class="headerlink" title="解法一：工具路由（Tool Routing）"></a>解法一：工具路由（Tool Routing）</h4><p>先做意图分类，只暴露相关的工具给模型，缩小决策空间：</p>
+<ul>
+<li>用户要做计算 → 只保留计算相关工具</li>
+<li>用户想出行 → 只保留天气、交通相关工具</li>
+</ul>
+<p><strong>具体实现</strong>：</p>
+<ul>
+<li><strong>Tool Filtering</strong>：根据工具描述文本做 embedding，检索到 Top-K 最相关的工具</li>
+<li><strong>Planner-Executor</strong>：先规划需要哪些步骤，再执行；本质上是降低 tool selection 的 <strong>entropy（熵）</strong>——选择空间减小，不确定性降低</li>
+</ul>
+<hr>
+<h4 id="解法二：Tool-Prompt-优化"><a href="#解法二：Tool-Prompt-优化" class="headerlink" title="解法二：Tool Prompt 优化"></a>解法二：Tool Prompt 优化</h4><ul>
+<li>工具描述要清晰、避免歧义</li>
+<li>工具之间功能尽量不要重叠（否则模型容易混淆）</li>
+<li>不过在实际系统中（如 Claude Code 的 skill），描述通常比较简短，需要在简洁和信息量之间平衡</li>
+</ul>
+<hr>
+<h3 id="三、协议与框架"><a href="#三、协议与框架" class="headerlink" title="三、协议与框架"></a>三、协议与框架</h3><h4 id="MCP（Model-Context-Protocol）"><a href="#MCP（Model-Context-Protocol）" class="headerlink" title="MCP（Model Context Protocol）"></a>MCP（Model Context Protocol）</h4><p><strong>是什么</strong>：统一大模型与外部工具、数据交互的开放协议。</p>
+<p><strong>作用</strong>：</p>
+<ul>
+<li>标准化工具调用</li>
+<li>统一上下文传递</li>
+<li>支持多 Agent 协作</li>
+</ul>
+<blockquote>
+<p>可以类比为”适配器架构”：每个模型只对接 MCP，MCP 统一向外对接各种工具，实现模型与工具的<strong>解耦</strong>，提升系统可扩展性。</p>
+</blockquote>
+<hr>
+<h4 id="Skill"><a href="#Skill" class="headerlink" title="Skill"></a>Skill</h4><p><strong>是什么</strong>：对一类任务能力的封装，通常由 <code>prompt + 工具 + 执行流程</code> 组成。</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">"订机票" skill = 查询航班 + 筛选 + 下单</span><br></pre></td></tr></table></figure></div>
+
+<p>Skill 是<strong>可复用的任务模块</strong>，是 Agent 能力抽象层。</p>
+<hr>
+<h4 id="Agent-框架"><a href="#Agent-框架" class="headerlink" title="Agent 框架"></a>Agent 框架</h4><p>常见的 Agent 框架有：</p>
+<ul>
+<li><strong>LangChain / LangGraph</strong>：提供 Tool Calling、Memory、Workflow（DAG）、Multi-Agent 的能力</li>
+</ul>
+<p>框架的作用是把工具调用、记忆管理、流程控制等基础设施封装好，让开发者专注业务逻辑。</p>
+<hr>
+<h3 id="四、Multi-Agent-协作"><a href="#四、Multi-Agent-协作" class="headerlink" title="四、Multi-Agent 协作"></a>四、Multi-Agent 协作</h3><h4 id="难点"><a href="#难点" class="headerlink" title="难点"></a>难点</h4><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>通信成本</td>
+<td>消息多 → 延迟高</td>
+</tr>
+<tr>
+<td>信息不一致</td>
+<td>不同 Agent 上下文不同 → 结论冲突</td>
+</tr>
+<tr>
+<td>决策冲突</td>
+<td>多个 Agent 给出不同方案</td>
+</tr>
+<tr>
+<td>任务拆分</td>
+<td>如何合理分工</td>
+</tr>
+<tr>
+<td>循环/死锁</td>
+<td>互相调用 → 无限循环</td>
+</tr>
+</tbody></table>
+<h4 id="常见解法"><a href="#常见解法" class="headerlink" title="常见解法"></a>常见解法</h4><ul>
+<li><strong>中央调度（Planner）</strong>：由一个中央规划器统一派发任务</li>
+<li><strong>角色分工（Role-based）</strong>：每个 Agent 有明确职责，避免功能重叠</li>
+<li><strong>共享 Memory</strong>：所有 Agent 读写同一份上下文，保证信息一致性</li>
+<li><strong>限制调用深度</strong>：设置最大调用链深度或轮次，防止死循环</li>
+</ul>
+<hr>
+<h3 id="五、Agent-设计模式"><a href="#五、Agent-设计模式" class="headerlink" title="五、Agent 设计模式"></a>五、Agent 设计模式</h3><blockquote>
+<p>以下按时间线和复杂性递增排列，理解每种模式的<strong>核心改进动机</strong>比死记架构图更重要。</p>
+</blockquote>
+<hr>
+<h4 id="1-ReAct（2022-10）"><a href="#1-ReAct（2022-10）" class="headerlink" title="1. ReAct（2022.10）"></a>1. ReAct（2022.10）</h4><p><strong>核心思想</strong>：将 Reasoning（推理）和 Acting（行动）结合起来。</p>
+<p>在 ReAct 之前，Reasoning 和 Acting 是割裂的。比如让孩子去厨房拿胡椒粉：</p>
+<ul>
+<li>先看台面上有没有</li>
+<li>再看灶台抽屉里</li>
+<li>最后看吊柜里</li>
+</ul>
+<p><strong>没有 ReAct</strong>：不管第几步找到了，ta 都会把所有地方翻一遍（按预设列表执行到底）。</p>
+<p><strong>有 ReAct</strong>：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Thought: 台面上应该有 → Action: 查看台面 → Observation: 没有</span><br><span class="line">→ Thought: 那可能在抽屉 → Action: 拉开抽屉 → Observation: 找到了 → 结束</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>模式</strong>：<code>Thought → Action → Observation</code> 循环，每步观察后再决策下一步。</p>
+<hr>
+<h4 id="2-Plan-Solve"><a href="#2-Plan-Solve" class="headerlink" title="2. Plan & Solve"></a>2. Plan &amp; Solve</h4><p><strong>核心改进</strong>：先制定完整计划，再逐步执行，且执行中可灵活调整计划。</p>
+<p><strong>类比</strong>：ReAct 适合”去厨房拿胡椒粉”（简单、顺序明确），Plan &amp; Solve 适合”做西红柿炒鸡蛋”——需要计划步骤，且过程中可能变化（打开冰箱发现没西红柿了，就新增”买西红柿”这一步）。</p>
+<p><strong>特点</strong>：本质上是 <strong>Zero-shot CoT 的改进版</strong>，在回答前先让模型制定计划。</p>
+<hr>
+<h4 id="3-ReWOO（Reason-Without-Observation）"><a href="#3-ReWOO（Reason-Without-Observation）" class="headerlink" title="3. ReWOO（Reason Without Observation）"></a>3. ReWOO（Reason Without Observation）</h4><p><strong>核心改进</strong>：去掉显式的 Observation 步骤，将其隐式嵌入到下一步的执行器中。</p>
+<p><strong>类比</strong>：常见审批流——目标是要拿到 C 文件：</p>
+<ol>
+<li>去 A 部门拿 a 文件</li>
+<li>拿 a 文件去 B 部门办 b 文件</li>
+<li>拿 b 文件去 C 部门办 c 文件 → 完成</li>
+</ol>
+<p>其中 B 和 C 部门对上游文件的”审查”本身就是 Observation，只是不需要显式写出来——由下一步执行器自动获取上一步的输出。</p>
+<p><strong>模式</strong>：<code>Plan1 → Action1 → Plan2(依赖Plan1输出) → Action2 → ...</code></p>
+<hr>
+<h4 id="4-LLMCompiler"><a href="#4-LLMCompiler" class="headerlink" title="4. LLMCompiler"></a>4. LLMCompiler</h4><p><strong>核心改进</strong>：并行执行相互独立的任务，提升效率。</p>
+<p><strong>问题</strong>：”张译和吴京差几岁”——搜索张译年龄和搜索吴京年龄是独立的，可以并行。</p>
+<p><strong>做法</strong>：Planner 生成一个 <strong>DAG（有向无环图）</strong>，把互相依赖的节点串行，独立节点并行，最后合并结果。</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>串行/并行</th>
+<th>场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ReAct</td>
+<td>串行</td>
+<td>简单顺序任务</td>
+</tr>
+<tr>
+<td>Plan &amp; Solve</td>
+<td>串行</td>
+<td>需要计划的任务</td>
+</tr>
+<tr>
+<td>LLMCompiler</td>
+<td>并行</td>
+<td>多变量独立查询</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="5-Basic-Reflection"><a href="#5-Basic-Reflection" class="headerlink" title="5. Basic Reflection"></a>5. Basic Reflection</h4><p><strong>核心思想</strong>：引入”检查”机制，像学生写作业、老师批改。</p>
+<ul>
+<li><strong>Generator</strong>：生成初始答案</li>
+<li><strong>Reflector</strong>：检查答案，给出改进建议</li>
+<li>循环迭代直到满足条件</li>
+</ul>
+<p><strong>模式</strong>：<code>Generate → Reflect → Revise → Reflect → ...</code></p>
+<hr>
+<h4 id="6-Reflexion"><a href="#6-Reflexion" class="headerlink" title="6. Reflexion"></a>6. Reflexion</h4><p><strong>核心改进</strong>：在 Basic Reflection 基础上引入<strong>外部评估</strong>和<strong>强化学习</strong>的思路。</p>
+<ul>
+<li>用外部数据（而非模型自己）来评估回答的准确性</li>
+<li>强制模型反思回答中 <strong>缺失（Missing）</strong> 和 <strong>多余（Superfluous）</strong> 的部分</li>
+<li>改进意见更具建设性</li>
+</ul>
+<p><strong>流程</strong>：思考(含反思) → 回答 → 评估 → 修改 → 循环</p>
+<hr>
+<h4 id="7-LATS（Language-Agent-Tree-Search）"><a href="#7-LATS（Language-Agent-Tree-Search）" class="headerlink" title="7. LATS（Language Agent Tree Search）"></a>7. LATS（Language Agent Tree Search）</h4><p><strong>核心改进</strong>：融合树搜索 + ReAct + Plan &amp; Solve + Reflection + 强化学习。</p>
+<p><strong>一句话</strong>：对各种模式的集大成者。</p>
+<ul>
+<li>用<strong>树搜索</strong>探索多条推理路径</li>
+<li>对每条路径做 <strong>Reward</strong> 评估（强化学习思路）</li>
+<li>融入 <strong>Reflection</strong> 持续改进</li>
+<li>最终拿到最佳路径</li>
+</ul>
+<p><strong>架构</strong>：多轮 Basic Reflection，多个 Generator 和 Reflector 同时工作。</p>
+<blockquote>
+<p>提示词模板与之前的 Reflection、Plan &amp; Solve、ReAct 差别不大，核心区别在于<strong>多了树搜索的评估和回溯机制</strong>。</p>
+</blockquote>
+<hr>
+<h4 id="8-Self-Discover"><a href="#8-Self-Discover" class="headerlink" title="8. Self-Discover"></a>8. Self-Discover</h4><p><strong>核心改进</strong>：让模型在更细粒度上对<strong>任务本身</strong>进行反思。</p>
+<p>Plan &amp; Solve 反思的是”计划是否需要补充”，而 <strong>Self-Discover 反思的是任务本身的拆解方式</strong>。</p>
+<p><strong>结构</strong>：</p>
+<ol>
+<li><strong>Selector</strong>：从一批反思策略中选择合适的</li>
+<li><strong>Adaptor</strong>：用选中的策略进行反思</li>
+<li><strong>Implementor</strong>：根据反思结果重新推理</li>
+</ol>
+<hr>
+<h3 id="六、设计模式演进一览"><a href="#六、设计模式演进一览" class="headerlink" title="六、设计模式演进一览"></a>六、设计模式演进一览</h3><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>核心改进</th>
+<th>出现时间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ReAct</td>
+<td>Reasoning + Acting 结合，Observation 驱动</td>
+<td>2022.10</td>
+</tr>
+<tr>
+<td>Plan &amp; Solve</td>
+<td>提前规划，可动态调整</td>
+<td>—</td>
+</tr>
+<tr>
+<td>ReWOO</td>
+<td>Observation 隐式化</td>
+<td>—</td>
+</tr>
+<tr>
+<td>LLMCompiler</td>
+<td>并行执行独立任务（DAG 调度）</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Basic Reflection</td>
+<td>生成 → 检查 → 修改 循环</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Reflexion</td>
+<td>引入外部评估 + 强化学习</td>
+<td>—</td>
+</tr>
+<tr>
+<td>LATS</td>
+<td>树搜索 + 多模式融合</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Self-Discover</td>
+<td>对任务本身进行元反思</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="小结：面试怎么聊-Agent"><a href="#小结：面试怎么聊-Agent" class="headerlink" title="小结：面试怎么聊 Agent"></a>小结：面试怎么聊 Agent</h3><ol>
+<li><strong>定义要准确</strong>：Agent = 推理 + 工具 + 观察反馈的闭环，不是单次 response</li>
+<li><strong>工具管理有思路</strong>：路由 → 筛选 → 优化描述 → Planner-Executor，核心是降低 entropy</li>
+<li><strong>协议和框架要区分</strong>：MCP 是通信协议，Skill 是能力封装，LangChain/LangGraph 是基础设施</li>
+<li><strong>Multi-Agent 要聊痛点</strong>：不要只说”可以分工协作”，要说通信成本、信息不一致、循环死锁</li>
+<li><strong>设计模式要懂演进逻辑</strong>：每一种新模式的动机比架构细节更重要——为什么之前的模式不够，新模式解决了什么</li>
+</ol>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 旧经新练：Agent 篇</li>
+        <li><strong>Author:</strong> Ginkgo</li>
+        <li><strong>Created at
+                :</strong> 2026-04-24 20:00:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2026-04-26 21:32:38
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://g1nkgo7.github.io/2026/04/24/旧经新练-Agent篇/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/nlp/">#nlp</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/llm/">#llm</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/interview/">#interview</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2026/04/24/%E6%97%A7%E7%BB%8F%E6%96%B0%E7%BB%83-RAG%E7%AF%87/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">旧经新练：RAG 篇</span>
+						<span class="post-nav-item">Prev posts</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/04/17/%E5%AE%9E%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%8D%8E%E4%B8%BA%E6%9A%91%E6%9C%9F%E5%AE%9E%E4%B9%A0%EF%BC%88AI%E5%B2%97%EF%BC%894%E6%9C%8815%E6%97%A5%E6%9C%BA%E8%AF%95%E9%A2%98%E8%A7%A3/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">实习日记：华为暑期实习（AI）- 4月15日机试题解</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="gitalk-container"></div>
+    <script data-swup-reload-script
+            src="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js"></script>
+    <script data-swup-reload-script>
+        (function() {
+            const startPath = location.pathname;
+            const startTime = Date.now();
+            const retryDelay = 200;
+            const retryLimit = 5000;
+
+            const runGitalk = () => {
+                if (location.pathname !== startPath) {
+                    return;
+                }
+
+                const container = document.getElementById('gitalk-container');
+                if (!container || typeof Gitalk === 'undefined') {
+                    if (Date.now() - startTime < retryLimit) {
+                        setTimeout(runGitalk, retryDelay);
+                    }
+                    return;
+                }
+
+                container.innerHTML = '';
+
+                let pageKey = decodeURI(location.pathname);
+                const maxLength = 50;
+                if (pageKey.length > maxLength) {
+                    pageKey = pageKey.substring(0, maxLength - 3) + '...';
+                }
+
+                try {
+                    new Gitalk({
+                        clientID: 'Ov23liQqIUZL7VlfwyIl',
+                        clientSecret: 'd5280a064abda06200c1597ac2085b2b6c9d35ff',
+                        repo: 'Gitalk',
+                        owner: 'G1nkgo7',
+                        admin: ['G1nkgo7'],
+                        id: pageKey,
+                        language: 'en',
+                        proxy: 'https://cors-server-ecru.vercel.app/github_access_token'
+                    }).render(container);
+                } catch (e) {
+                    window.Gitalk = null;
+                }
+            };
+
+            runGitalk();
+        })();
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">旧经新练：Agent 篇</div>
+		<ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF-Agent"><span class="nav-text">一、什么是 Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%B7%A5%E5%85%B7%E7%AE%A1%E7%90%86%EF%BC%9A%E5%B7%A5%E5%85%B7%E5%A4%9A%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-text">二、工具管理：工具多了怎么办</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%8D%8F%E8%AE%AE%E4%B8%8E%E6%A1%86%E6%9E%B6"><span class="nav-text">三、协议与框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81Multi-Agent-%E5%8D%8F%E4%BD%9C"><span class="nav-text">四、Multi-Agent 协作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81Agent-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-text">五、Agent 设计模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%BC%94%E8%BF%9B%E4%B8%80%E8%A7%88"><span class="nav-text">六、设计模式演进一览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93%EF%BC%9A%E9%9D%A2%E8%AF%95%E6%80%8E%E4%B9%88%E8%81%8A-Agent"><span class="nav-text">小结：面试怎么聊 Agent</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ginkgo</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        20 posts in total
+                    </span>
+                    
+                        <span>
+                            47.8k words in total
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.9.0</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+            
+                
+        
+                
+        
+                
+
+                    
+                        <script data-swup-reload-script>window.addEventListener("load",function(){setTimeout(function(){if(window.MathJax){MathJax.typesetPromise().catch(e=>console.log("MathJax error:",e))}},500)});document.addEventListener("swup:contentReplaced",function(){if(window.MathJax){MathJax.typesetPromise().catch(e=>console.log("MathJax error:",e))}})</script>
+                    
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container" role="dialog" aria-modal="true" aria-label="Image viewer">
+	<button class="image-viewer-close" type="button" aria-label="Close">
+		<i class="fa-solid fa-xmark"></i>
+	</button>
+	<button class="image-viewer-prev" type="button" aria-label="Prev">
+		<i class="fa-solid fa-chevron-left"></i>
+	</button>
+	<div class="image-viewer-frame">
+		<img src="" alt="">
+	</div>
+	<div class="image-viewer-exif-panel hidden absolute left-1/2 bottom-20 -translate-x-1/2 w-[min(92vw,420px)] max-h-[60vh] overflow-hidden rounded-2xl bg-background-color-transparent-80 p-4 text-left shadow-redefine-flat backdrop-blur-md" role="dialog" aria-label="EXIF" aria-hidden="true">
+		<div class="flex items-center justify-between mb-3">
+			<span class="text-sm font-semibold text-first-text-color">EXIF</span>
+			<button class="image-viewer-exif-close flex h-8 w-8 items-center justify-center rounded-full bg-background-color-transparent-80 text-first-text-color transition hover:bg-background-color-transparent-40" type="button" aria-label="Close">
+				<i class="fa-solid fa-xmark text-[0.65rem]"></i>
+			</button>
+		</div>
+		<div class="image-viewer-exif-cards grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1 scrollbar-hide"></div>
+		<template class="image-viewer-exif-card-template">
+			<div class="rounded-lg bg-background-color-transparent-40 px-3 py-2">
+				<div class="image-viewer-exif-card-header flex items-center gap-2 mb-1">
+					<i class="image-viewer-exif-card-icon fa-solid fa-circle-info text-xs text-third-text-color"></i>
+					<div class="image-viewer-exif-card-title text-xs font-semibold text-first-text-color"></div>
+				</div>
+				<div class="image-viewer-exif-card-items flex flex-col gap-1"></div>
+			</div>
+		</template>
+	</div>
+	<button class="image-viewer-exif-toggle flex items-center gap-2 hidden absolute left-1/2 bottom-6 -translate-x-1/2 rounded-full border border-border-color bg-background-color-transparent-80 px-4 py-2 text-first-text-color backdrop-blur-md transition hover:bg-background-color-transparent-40" type="button" aria-label="EXIF" aria-expanded="false">
+		<i class="fa-solid fa-circle-info text-xs"></i>
+		<span class="text-xs font-semibold uppercase tracking-wider">EXIF</span>
+	</button>
+	<button class="image-viewer-next" type="button" aria-label="Next">
+		<i class="fa-solid fa-chevron-right"></i>
+	</button>
+</div>
+
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Search..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    window.swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+
+    window.dispatchEvent(
+        new CustomEvent("redefine:swup:ready", {
+            detail: {
+                swup: window.swup,
+            },
+        }),
+    );
+</script>
+
+
+
+
+	
+<script src="/js/build/main.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/minimasonry.min.js" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+
+	
+	<div id="aplayer"></div>
+
+<script src="/js/build/libs/APlayer.min.js"></script>
+
+
+<script src="/js/build/plugins/aplayer.js"></script>
+
+
+	
+</body>
+
+</html>

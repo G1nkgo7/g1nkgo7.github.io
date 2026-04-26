@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="">
+    
+    
+    <meta name="author" content="Ginkgo">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes ASAP (before DOMContentLoaded)
+            (function() {
+                const addBodyClass = () => {
+                    const b = document.body;
+                    if (!b) return false;
+                    b.classList.add(theme + "-mode");
+                    return true;
+                };
+
+                // Try immediately
+                if (addBodyClass()) return;
+
+                // Observe until body exists
+                const mo = new MutationObserver(() => {
+                    if (addBodyClass()) mo.disconnect();
+                });
+                mo.observe(document.documentElement, { childList: true, subtree: true });
+            })();
+        })();
+    </script>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2026/04/24/旧经新练-简历篇/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+        
+        <meta name="description" content="刷面经不如啃自己的项目。面试准备的核心是把自己做过的讲清楚——输入是什么、输出是什么、流程是什么、验证怎么做、个人贡献在哪。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="旧经新练：实习 &amp; 项目篇">
+<meta property="og:url" content="http://example.com/2026/04/24/%E6%97%A7%E7%BB%8F%E6%96%B0%E7%BB%83-%E7%AE%80%E5%8E%86%E7%AF%87/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="刷面经不如啃自己的项目。面试准备的核心是把自己做过的讲清楚——输入是什么、输出是什么、流程是什么、验证怎么做、个人贡献在哪。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-04-24T13:32:20.000Z">
+<meta property="article:modified_time" content="2026-04-26T13:32:33.083Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="面试准备">
+<meta property="article:tag" content="项目复盘">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.ico" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+    <meta name="theme-color" content="#927efb">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <!--- Page Info-->
+    
+    <title>
+        
+            旧经新练：实习 &amp; 项目篇 | Ginkgo&#39;s Blog
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+        
+            
+    
+            
+    
+            
+                
+                    <link rel="stylesheet" href="/fonts/fonts.css" />
+                
+    
+            
+                
+                    <style>.ml13, .preloader .ml13 { font-family: "WLJH-w800", sans-serif !important; font-weight: 800 !important; } #subtitle, .home-banner #subtitle { font-family: "YouYuan", "Zhi Mang Xing", sans-serif !important; }</style>
+                
+    
+            
+                
+                    <script data-swup-reload-script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+                
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+        <link href="/fonts/fonts.css" rel="stylesheet">
+        <style>
+            .preloader .ml13 {
+                font-family: 'WLJH-w800', 'Chillax-Variable', sans-serif !important;
+            }
+
+            #subtitle,
+            #subtitle + .typed-cursor {
+                font-family: 'YouYuan', '幼圆', 'Microsoft YaHei', sans-serif !important;
+            }
+        </style>
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+        
+<script src="/js/build/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"en","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":true,"link_icon":true,"delete_mask":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":["True love prevails."]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"atom-one-light","dark":"atom-one-dark"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#927efb","secondary":null,"default_mode":"dark"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":true,"custom_message":"岁月朝暮并往 愿你行至天光"},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":null},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/The_Cliffs_1.jpg","dark":"/images/The_Cliffs_6.jpg"},"title":"Ginkgo Forever","subtitle":{"text":["闲言碎语加载中……"],"hitokoto":{"enable":true,"show_author":false,"api":"https://v1.hitokoto.cn?max_length=20"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#fff"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.8rem","line_height":1.2},"custom_font":{"enable":false,"family":"STXINGKA","url":"/fonts/fonts.css"},"social_links":{"enable":false,"style":"default","links":[{"icon":"fa-brands fa-github","url":null},{"icon":"fa-brands fa-twitter","url":null},{"icon":"fa-solid fa-at","url":"you@example.com"},{"icon":"fa-brands fa-telegram","url":null},{"icon":"/images/custom-icon.svg","url":null}],"qrs":[{"icon":"fa-brands fa-weixin","qr":null},{"icon":"/images/custom-icon.svg","qr":null}]}},"plugins":{"feed":{"enable":true},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"梨花香","artist":"佚名","url":"/music/source/梨花香.mp3","cover":"/music/image/梨花香.jpg","lrc":"/music/lrc/梨花香.lrc"}]},"mermaid":{"enable":false,"version":"11.4.1","theme":{"light":"default","dark":"dark"}}},"version":"2.9.0","navbar":{"auto_hide":true,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-solid fa-house"},"Archives":{"path":"/archives","icon":"fa-solid fa-archive"},"About":{"path":"/about","icon":"fa-solid fa-user"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur","masonry":{"batch_size":12,"initial_batch_size":24}},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footer":{"runtime":true,"icon":"<i class=\"fa-solid fa-heart fa-beat\" style=\"--fa-animation-duration: 0.5s; color: #f54545\"></i>","start":"2022/8/17 11:45:14","statistics":true,"customize":null,"icp":{"enable":false,"number":null,"url":null}},"footerStart":"2022/8/17 11:45:14","mermaid":{"style":{"light":"default","dark":"dark"}}};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.i18n = {"search":"Search...","toc":"On this page","prev":"Prev","next":"Next","prev_posts":"Prev posts","next_posts":"Next posts","page":"Page %d","recent_posts":"Recent Posts","share":"Share","powered_by":"POWERED BY %s","theme":"THEME","rss_feed":"RSS Feed","category":"Category","categories":"Categories","tag":"Tag","tags":"Tags","post":"Post","posts":"Posts","tagcloud":"Tag Cloud","comment":"Comment","comments":"Comments","home":"Home","archive":"Archive","archives":"Archives","top":"TOP","sticky":"Sticky","go-back-home":"Go Back Home","masonry_loading":"Loading photos...","image_viewer":"Image viewer","close":"Close","exif":{"title":"EXIF","cards":{"camera":"Camera","lens":"Lens","exposure":"Exposure","other":"Other"},"fields":{"make":"Brand","model":"Model","date_taken":"Date taken","lens_model":"Lens","focal_length":"Focal length","focus_mode":"Focus mode","shutter":"Shutter","aperture":"Aperture","iso":"ISO","exposure_program":"Exposure program","exposure_compensation":"Exposure compensation","metering_mode":"Metering mode","flash":"Flash","white_balance":"White balance","latitude":"Latitude","longitude":"Longitude","altitude":"Altitude"},"status":{"loading":"Loading...","no_exif":"No EXIF available","library_missing":"EXIF library not loaded","image_source_missing":"Image source unavailable","unavailable":"EXIF unavailable (blocked by CORS or missing metadata)","flag_unavailable":"EXIF unavailable"}},"about":"About","changelog":"Changelog","links":"Links","link":"Link","friends":"Friends","friend":"Friend","timeline":"Timeline","shuoshuo":"Shuoshuo","bookmarks":"Bookmarks","site_uv":"VISITOR COUNT","site_pv":"TOTAL PAGE VIEWS","read_more":"Read more","wordcount":"Words","min2read":"Mins","status":"Status","runtime":"Blog up for","days":"days","hours":"hrs","minutes":"Min","seconds":"Sec","optimized_by":"and Optimized by Evan","rights":"All Rights Reserved","site_posts":"%s posts in total","site_wordcount":"%s words in total","copyright":{"author":"Author","title":"Title","link":"Link","create_time":"Created at","update_time":"Updated at","license_title":"License","license_content":"This work is licensed under %s.","all_rights_reserved":"All Rights Reserved &#169; %s","public_domain":"This work is in the public domain."},"ago":{"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"},"create_time":"Created","update_time":"Updated","expired":"This post is written %s days ago, and the content may not be up to date."};
+    window.data = {"masonry":true};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 8.1.1"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+
+<body>
+	<div class="progress-bar-container">
+	
+	<span class="scroll-progress-bar"></span>
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<link href="/fonts/fonts.css" rel="stylesheet">
+<style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 800;
+        font-family: 'WLJH-w800', 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        岁月朝暮并往 愿你行至天光
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({ loop: true })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [20, 0],
+                translateZ: 0,
+                opacity: [0, 1],
+                filter: ['blur(5px)', 'blur(0px)'],
+                easing: "easeOutExpo",
+                duration: 1200,
+                delay: (el, i) => 300 + 20 * i,
+            })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [0, -20],
+                opacity: [1, 0],
+                filter: ['blur(0px)', 'blur(5px)'],
+                easing: "easeInExpo",
+                duration: 1000,
+                delay: (el, i) => 15 * i,
+                complete: function() {
+                    hidePreloader();
+                }
+            }, '-=700');
+
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                Ginkgo&#39;s Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-solid fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-solid fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/about"
+                                        >
+                                    <i class="fa-solid fa-user fa-fw"></i>
+                                    ABOUT
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-solid fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-solid fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/about"
+                        >
+                            <span>
+                                ABOUT
+                            </span>
+                            
+                                <i class="fa-solid fa-user fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">34</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">17</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">20</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			
+			
+			<img src="/images/cover/%E6%97%A7%E7%BB%8F%E6%96%B0%E7%BB%83-%E7%AE%80%E5%8E%86%E7%AF%87.png" alt="旧经新练：实习 &amp; 项目篇" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75" />
+			
+			<div class="w-full flex items-center absolute bottom-0 justify-start">
+				<h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">旧经新练：实习 &amp; 项目篇</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/images/avatar.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">Ginkgo</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">True love prevails.</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-04-24 21:32:20</span>
+        <span class="mobile">2026-04-24 21:32:20</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-04-26 21:32:33</span>
+            <span class="mobile">2026-04-26 21:32:33</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E6%97%A7%E7%BB%8F%E6%96%B0%E7%BB%83/">旧经新练</a>&nbsp;
+                        </li>
+                    
+                    
+                
+                    
+                        
+                            <li>></li>
+                        
+                        <li>
+                            <a href="/categories/%E6%97%A7%E7%BB%8F%E6%96%B0%E7%BB%83/%E9%9D%A2%E7%BB%8F/">面经</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E9%9D%A2%E8%AF%95%E5%87%86%E5%A4%87/">面试准备</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E9%A1%B9%E7%9B%AE%E5%A4%8D%E7%9B%98/">项目复盘</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.6k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>16 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<blockquote>
+<p>刷面经不如啃自己的项目。别人的面经是别人的，只有自己做过的才能讲出颗粒度。</p>
+</blockquote>
+<hr>
+<h2 id="一、实习经历"><a href="#一、实习经历" class="headerlink" title="一、实习经历"></a>一、实习经历</h2><h3 id="1-浪潮信息-AI软件研发-日常实习生"><a href="#1-浪潮信息-AI软件研发-日常实习生" class="headerlink" title="1. 浪潮信息 - AI软件研发 - 日常实习生"></a>1. 浪潮信息 - AI软件研发 - 日常实习生</h3><p><strong>时间：2024.09 - 2025.03 | 部门：AI&amp;HPC 人工智能与高性能计算部</strong></p>
+<p>参与了 Yuan 3.0 多模态大模型预训练环节的多模态数据构建以及其他研发相关工作，简历上一句话，实际上拆了三个方向：</p>
+<h4 id="①-多模态数据增强（预训练数据的多样性）"><a href="#①-多模态数据增强（预训练数据的多样性）" class="headerlink" title="① 多模态数据增强（预训练数据的多样性）"></a>① 多模态数据增强（预训练数据的多样性）</h4><p>核心问题：大模型吃的数据太”平”了–2D图片缺乏空间多样性。</p>
+<p>+1 的思路：<strong>从视觉视角变化入手</strong>。</p>
+<ul>
+<li>透视变换、仿射变换、球形透视、鱼眼透视等”空间”变换方式</li>
+<li>让 2D 图产生”立体感”</li>
+<li>本质上是在提升训练数据的空间多样性，让模型对视角变化更鲁棒</li>
+</ul>
+<h4 id="②-高质量数据构建（蒸馏-SOTA-模型数据）"><a href="#②-高质量数据构建（蒸馏-SOTA-模型数据）" class="headerlink" title="② 高质量数据构建（蒸馏 SOTA 模型数据）"></a>② 高质量数据构建（蒸馏 SOTA 模型数据）</h4><p>用强模型生成更好的、更高质量的训练数据。</p>
+<p>通过 VQA 的具体操作：</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">图片 → Qwen-2.5-VL-72B-Instruct → 生成5个与图片强相关的问题 → 逐个回答 → 得到微调数据</span><br></pre></td></tr></table></figure></div>
+
+<p>场景包括：图表问答、时间推理、比赛/生活等多种场景。核心是让模型自己出题自己答，数据质量比人工标注还稳定。</p>
+<h4 id="③-模型评测"><a href="#③-模型评测" class="headerlink" title="③ 模型评测"></a>③ 模型评测</h4><p>在 AIME 2025 上评测 DeepSeek / Qwen / Yuan 2.0 的数学能力。</p>
+<h4 id="④-EPAI-平台-datatool-部分功能开发"><a href="#④-EPAI-平台-datatool-部分功能开发" class="headerlink" title="④ EPAI 平台 datatool 部分功能开发"></a>④ EPAI 平台 datatool 部分功能开发</h4><p>EPAI 是浪潮开发的、对外的大模型应用开发平台，其中 datatool 是为了支持模型训练数据的格式转化而开发的核心数据处理工具<br>例如，为了给 VLM 准备训练数据，搞了个 epub（电子书）转 PDF 的解析工具，支持多格式文档的结构化处理。</p>
+<h4 id="⑤-llama-cpp-量化研究"><a href="#⑤-llama-cpp-量化研究" class="headerlink" title="⑤ llama.cpp 量化研究"></a>⑤ llama.cpp 量化研究</h4><p>部门刚接触模型量化，我负责：</p>
+<ul>
+<li>完整跑通 llama.cpp 量化流程</li>
+<li>把 Yuan 2.0 量化成 gguf 格式</li>
+<li>对比推理速度 vs 精度损失</li>
+</ul>
+<hr>
+<h3 id="2-中烟创新-AI软件研发-日常实习生"><a href="#2-中烟创新-AI软件研发-日常实习生" class="headerlink" title="2. 中烟创新 - AI软件研发 - 日常实习生"></a>2. 中烟创新 - AI软件研发 - 日常实习生</h3><p><strong>时间：2025.11 - 2026.03 | 部门：算法岗</strong></p>
+<h4 id="核心项目：智能案卷审查-算法后端"><a href="#核心项目：智能案卷审查-算法后端" class="headerlink" title="核心项目：智能案卷审查-算法后端"></a>核心项目：智能案卷审查-算法后端</h4><p>从 PDF/案卷到结构化数据 + 审查结果，整个算法端 pipeline 都是我搭的。</p>
+<p><strong>全链路流程：</strong></p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">PDF / Word 输入</span><br><span class="line">  ↓ 图片预处理（二值化、去印章、方向识别） ← 基于方向识别与去印章基于 PaddleOCR 子模块，去印章先检测印章区域，再通过传统 cv 算法去除</span><br><span class="line">  ↓ MinerU 结构识别（v2.5）</span><br><span class="line">  ↓ LLM 标题重写 → 按标题分割子文书</span><br><span class="line">  ↓ DeepSeek-OCR2 子文书内容 OCR 重识别 ← 实测质量最高</span><br><span class="line">  ↓ 表格识别（阿里读光表格线识别 + PaddleOCR 进一步解析）</span><br><span class="line">  ↓ 文本解析（段落/句分割）</span><br><span class="line">  ↓ LLM 实体抽取（键值对）</span><br><span class="line">  ↓ 前端展示（提取文本值 → 定位原文位置 → 匹配 OCR 结果 → 得到用于前端展示的 bbox 定位）</span><br><span class="line">  ↓ 规则引擎审查（输入：规则+关联实体值，动态批处理）</span><br><span class="line">  ↓ SSE 实时推送返回结果</span><br><span class="line">  （注：LLM 经过 Qwen2.5-Instruction-7b → Qwen2.5-Instruction-14b → Qwen3-14b 的迭代</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>我负责的：</strong></p>
+<ul>
+<li>FastAPI 搭整个算法后端</li>
+<li>整体 pipeline 流程设计</li>
+<li>模型调研、选型、评估</li>
+<li>规则引擎设计（V2 规划做成 Agent，用 Tool/Function Call 能力更进一步处理时间/数字计算的问题）</li>
+<li>OAuth2 认证 + SSE 实时推送</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>硬约束：</strong> 这是 TO C 产品，用户要求只有 2 张 4090，<strong>且必须内网离线部署</strong>。资源受限下的工程取舍是这项目的核心挑战。</p>
+</blockquote>
+<p><strong>准确率怎么验证？验证方式：</strong></p>
+<ul>
+<li>构造测试样本，对比字段级 OCR accuracy + 规则命中率</li>
+<li>人工抽样 + GPT等先进模型辅助辅助，验证系统输出的正确性</li>
+</ul>
+<p><strong>附带项目：薪资表格智能比对</strong></p>
+<ul>
+<li>基于 PaddleX 表格识别模型做参数调优</li>
+<li>PDF 薪资数据提取 → 与 Excel 标准数据自动比对</li>
+<li>处理逻辑与上述表格识别相似，属于上述项目的前置项目</li>
+</ul>
+<p><strong>面试小问题准备：SSE 与 WebSocket 的区别</strong></p>
+<ul>
+<li>SSE：服务器 → 客户端单向，基于 HTTP，自动重连，适合消息推送</li>
+<li>WebSocket：全双工，适合实时交互（聊天、协同编辑）</li>
+<li>这个场景只是后端推进度，SSE 够用且简单</li>
+</ul>
+<p><strong>面试小问题准备：OAuth2 认证是什么？为什么要实现？</strong></p>
+<ul>
+<li>OAuth 2.0：是一种授权协议，允许第三方应用在不获取用户密码的情况下，安全地访问用户在其他平台上的资源。</li>
+<li>因为这个系统是前端/客户端-Java业务服务端-算法服务端架构，业务与算法通信通过 Access Token 控制接口访问权限，提升系统安全性。</li>
+</ul>
+<hr>
+<h2 id="二、科研经历"><a href="#二、科研经历" class="headerlink" title="二、科研经历"></a>二、科研经历</h2><h3 id="1-Future-Requirement-Issue-Localization（华为合作科研性项目）"><a href="#1-Future-Requirement-Issue-Localization（华为合作科研性项目）" class="headerlink" title="1. Future_Requirement_Issue_Localization（华为合作科研性项目）"></a>1. Future_Requirement_Issue_Localization（华为合作科研性项目）</h3><p><strong>目标：</strong> 给定代码仓库 + issue 描述 + 修复 patch，做<strong>函数级定位</strong>–找出 issue 应该在哪些文件、类、函数上修改。</p>
+<p><strong>项目全链路：</strong> SOTA 调研 → Benchmark 构建（FRL_Bench）→ SOTA 复现 → 基准测评 → 方法提出。前期编写了多个转换脚本，将 SWE-Rank、LocAgent 等 baseline 的输出统一为标准格式，支持从 patch diff 自动提取 <code>edit_files</code> / <code>edit_functions</code>。</p>
+<h4 id="我的核心产出：CodeGraphBuilder"><a href="#我的核心产出：CodeGraphBuilder" class="headerlink" title="我的核心产出：CodeGraphBuilder"></a>我的核心产出：CodeGraphBuilder</h4><p>从 LocAgent 项目中抽离的独立代码知识图谱构建模块，核心架构：</p>
+<p><strong>① 代码知识图谱构建</strong></p>
+<p>对仓库全量 <code>.py</code> 文件做 AST 解析，提取类/函数/方法及其层级关系，进一步提取 import、继承、调用关系，构建包含 directory/file/class/function 四种节点和 CONTAINS/IMPORTS/INHERITS/INVOKES 四种边的有向异构图。基于 NetworkX MultiDiGraph 存储，支持 Pickle 持久化和 Neo4j 后端。</p>
+<blockquote>
+<p><strong>技术难点：</strong> Python 语法边界 case 处理–<code>constants.False</code>（变量名与关键字冲突）、<code>except Exception, e:</code>（Python 2 旧语法）、<code>\ufeff</code> BOM 头字符等，直接调用 <code>ast.parse</code> 会失败，需先通过正则清洗再解析。</p>
+</blockquote>
+<p>将图谱索引到 Milvus Lite，构建 4 个专用向量索引（Node Name / Code Snippet / File Chunk / Folder Summary），支持语义搜索。代码分块按 Python 语法结构智能切分，而非固定字符数硬切。</p>
+<p><strong>② 历史信息增强（PR co-change 分析）</strong></p>
+<p>核心思想：如果两个文件/函数经常在同一 PR 中被修改，它们很可能存在隐式依赖–即使 AST 分析无法直接看出关联。</p>
+<p>通过 GitHub API 拉取 issue 创建前的已合并 PR，对 PR 同时构建 BM25 和向量索引，采用 RRF 融合排序筛选 top-K 相关 PR。在此基础上统计 co-change 关系，不仅支持文件级别，还深入到类/函数级别（符号级 co-change），为 AST 分析无法覆盖的文件提供可解释的补充线索。</p>
+<blockquote>
+<p><strong>技术难点：</strong> GitHub API 限流处理（token + 缓存机制）；PR 数量大时先用 hybrid search（BM25 + embedding）根据 issue 描述筛选，而非全量处理。commit vs PR 的取舍：commit 粒度太细（一个 PR 可能包含 10 个 commit，每个只改 1-2 行），co-change 信号太弱；PR 级别聚合了完整的修改上下文（多个 commit + issue 描述 + labels），信息量大得多。</p>
+</blockquote>
+<p><strong>③ Agent 化实验 &amp; ④ 评估</strong></p>
+<p>用 LLM Agent 自动完成 issue 定位和修复：克隆仓库 → 建图 + 历史索引 → 渲染 prompt（issue 描述 + 检索结果）→ 调用 LLM CLI（Codex / Claude Code / Gemini）→ 输出 git diff。统一封装多 Provider，通过 <code>config.toml</code> 切换后端；每个 instance 独立运行目录，支持 <code>ThreadPoolExecutor</code> 并发执行。</p>
+<p>评估从 git diff 自动提取 <code>edit_files</code> / <code>edit_classes</code> / <code>edit_functions</code>，与 ground truth 对比，计算 Location Accuracy、Patch Accuracy、Location Set Metrics（精确率/召回率）。</p>
+<h4 id="🌟-项目亮点"><a href="#🌟-项目亮点" class="headerlink" title="🌟 项目亮点"></a>🌟 项目亮点</h4><ol>
+<li><strong>图 + 检索双通道融合：</strong> 知识图谱的结构推理（”这个函数被谁调用”）与向量检索的语义理解（”找处理认证相关的代码”）互补</li>
+<li><strong>历史 co-change 定位增强：</strong> 为 AST 分析遗漏的文件提供可解释的补充线索</li>
+<li><strong>独立可复用包：</strong> 支持 Pluggable Storage（Pickle / Neo4j）、Batch Processing、多种 Embedding 后端</li>
+<li><strong>端到端 pipeline：</strong> 数据加载 → 仓库克隆 → 建图 → 检索 → Agent 执行 → 结果评估</li>
+</ol>
+<h4 id="面试问答预演"><a href="#面试问答预演" class="headerlink" title="面试问答预演"></a>面试问答预演</h4><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>回答要点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>为什么只支持 Python？</td>
+<td>Python AST 是最成熟的，其他语言没有同等质量的内置解析器。支持 JS/Go 需引入 tree-sitter，工程量大</td>
+</tr>
+<tr>
+<td>AST 解析遇到的坑？</td>
+<td>变量名与关键字冲突、Python 2 旧语法、BOM 头等边界 case，直接 <code>ast.parse</code> 会失败，需先正则清洗</td>
+</tr>
+<tr>
+<td>commit vs PR 为什么选 PR？</td>
+<td>Commit 粒度太细，co-change 信号弱；PR 聚合了完整修改上下文，信息量大。代价是 API 限流，需 token + 缓存</td>
+</tr>
+<tr>
+<td>知识图谱 vs 向量检索？</td>
+<td>图谱擅长结构推理（调用链、继承关系），向量检索擅长语义理解。两者互补</td>
+</tr>
+<tr>
+<td>未来演进方向？</td>
+<td>短期：tree-sitter 支持多语言；中期：co-change 在线增量更新；长期：Agent 自动生成修复方案</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="2-多模态神经机器翻译综述"><a href="#2-多模态神经机器翻译综述" class="headerlink" title="2. 多模态神经机器翻译综述"></a>2. 多模态神经机器翻译综述</h3><p><strong>EMNLP 2025 Main Conference | 2024.03 - 2024.11 | 与 Zhenyu Hou 共同主导</strong></p>
+<p><strong>研究目标：</strong> 多模态机器翻译（MNMT）想用图像辅助文本翻译，但现有方法效果不稳定——有时候加了图反而翻得更差。做系统性综述，搞清楚问题在哪、未来往哪走。</p>
+<p><strong>我做的：</strong></p>
+<p><strong>① 技术路线全景梳理</strong></p>
+<p>将 MNMT 方法按应用视角分为五大类：</p>
+<ul>
+<li><strong>消歧导向方法：</strong> 跨模态门控 / 跨模态注意力 / 跨模态预训练 / 多任务学习</li>
+<li><strong>视觉均衡方法：</strong> 单视图融合 / 文本引导生成（无图时幻觉出相关视觉特征）</li>
+<li><strong>视觉枢纽方法：</strong> 用图像作语言无关桥梁，支撑无监督/低资源翻译</li>
+<li><strong>大模型方法：</strong> 把视觉特征转成 LLM 可理解的 token 格式</li>
+<li><strong>测试阶段解耦方法：</strong> 视觉幻觉（训练时学，推理时不依赖图）/ 自适应图像检索</li>
+</ul>
+<p><strong>② 数据集分类体系 &amp; 核心挑战</strong></p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>代表数据集</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>通用域</strong></td>
+<td>Multi30K, Flickr30K, MS COCO</td>
+<td>日常场景描述，句子简短</td>
+</tr>
+<tr>
+<td><strong>领域特定</strong></td>
+<td>Fashion-MMT, EMMT, OCRMT30K</td>
+<td>电商/时尚领域，含专业术语和歧义表达</td>
+</tr>
+<tr>
+<td><strong>多域</strong></td>
+<td>WIT, Conceptual Captions, BLATID</td>
+<td>跨场景、多语言、大规模</td>
+</tr>
+</tbody></table>
+<p>数据集四大硬伤：长尾现象严重、低资源多模态数据稀缺、缺乏对抗样本（换张噪声图模型就崩）、图文语义共现不足（图里大量背景信息是纯噪声）。</p>
+<p>七大核心挑战中<strong>最关键是语义偏移</strong>——图像是双刃剑，对齐时提升翻译，噪声时导致严重错译（如把 “tank” 背心翻成 “坦克”）。此外还有视觉不平衡、计算成本、模型可解释性、LLM/MLLM 适配等问题。</p>
+<p><strong>③ 评估方法与核心结论</strong></p>
+<p>梳理了翻译质量评估（BLEU / METEOR / COMET 等）、视觉贡献评估（跨模态门控分析 / 对抗评估）、融合效果评估三大类方法。当前缺乏统一评估框架，不同论文用不同数据集+指标，模型间很难直接对比。</p>
+<blockquote>
+<p><strong>核心结论：</strong> 视觉信息不是始终有用。它在文本有歧义时才有明显价值（消歧），其他时候模型更依赖文本，视觉反而可能成为噪声甚至导致语义偏移。</p>
+</blockquote>
+<p>这篇综述直接促成了本科毕设：基于提示微调与迁移学习的多模态神经机器翻译系统。</p>
+<h4 id="面试追问预演"><a href="#面试追问预演" class="headerlink" title="面试追问预演"></a>面试追问预演</h4><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>回答要点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>为什么视觉信息有时候没用？</td>
+<td>很多句子本身信息完整，模型自然更依赖文本；噪声图反而会带偏翻译（语义偏移）</td>
+</tr>
+<tr>
+<td>怎么解决语义偏移？</td>
+<td>更强的跨模态对齐（细粒度 cross-attention）、引入对齐监督信号、设计门控机制让模型学会”什么时候该看图”</td>
+</tr>
+<tr>
+<td>LLM/MLLM 表现如何？</td>
+<td>GPT-4 在通用域能和 SOTA 打平，领域场景照样翻车；MLLM 引入视觉后性能反而下降，核心问题是细粒度图文对齐能力不足</td>
+</tr>
+<tr>
+<td>数据集最大问题？</td>
+<td>太”简单”——句子短、场景日常、几乎全是图文对齐的”好样本”，缺少对抗样本</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三、项目经历"><a href="#三、项目经历" class="headerlink" title="三、项目经历"></a>三、项目经历</h2><h3 id="1-基于-Neo4j-知识图谱的烟机-KBQA-系统"><a href="#1-基于-Neo4j-知识图谱的烟机-KBQA-系统" class="headerlink" title="1. 基于 Neo4j 知识图谱的烟机 KBQA 系统"></a>1. 基于 Neo4j 知识图谱的烟机 KBQA 系统</h3><p><strong>时间：2023.03 - 2024.02 | 合作：浙江大学软件学院</strong></p>
+<p><strong>背景：</strong> 烟叶配方平控、烟机日常检修需要行业专属问答系统。用户（操作工/维修工）用自然语言提问，系统从知识图谱中检索答案。端到端 KBQA。</p>
+<p><strong>整体架构：</strong></p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">离线：行业文档/维修手册/配方数据 → 关系抽取 → 实体归一化 → Neo4j 建图</span><br><span class="line">在线：用户提问 → NER → 模板匹配（语义相似度） → Cypher 查询 → 返回答案</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>我做的：</strong></p>
+<p><strong>离线阶段 - 知识图谱构建</strong></p>
+<ul>
+<li><strong>关系抽取（CasRel）：</strong> 从非结构化文本中抽取 (主体, 关系, 客体) 三元组。BIO 标注体系，部分人工标注 + CasRel 自动抽取</li>
+<li><strong>实体归一化：</strong> 对别名/变体做字符串相似度匹配（编辑距离 + 语义相似度），用并查集维护等价类，合并冗余节点（如 <code>"PROTOS70"</code> 和 <code>"Protos 70"</code> → <code>PROTOS 70</code>）</li>
+<li><strong>Neo4j 建图：</strong> 三元组导入 Neo4j，最终规模数千个设备/部件节点，上万条关系边</li>
+</ul>
+<p><strong>在线阶段 - 问答流程</strong></p>
+<p>以 <code>"PROTOS M5 的检修周期是多少？"</code> 为例：</p>
+<ol>
+<li><strong>NER（BERT + BiLSTM + CRF）：</strong> 用垂直领域数据微调，从问题中识别设备名、部件名等实体</li>
+<li><strong>模板匹配：</strong> 将问题实体替换为占位符 → 句子向量化（sentence-transformer）→ 计算与模板库的语义相似度 → 选最高分模板填入槽位。比纯规则泛化更强（能处理”检修周期是多久”和”多久检修一次”的同义表达）</li>
+<li><strong>Cypher 生成 + 查询：</strong> 模板实例化为 Cypher 查询语句 → 执行 Neo4j 查询 → 返回答案</li>
+</ol>
+<blockquote>
+<p><strong>夏令营面试被问过的问题：</strong></p>
+<ul>
+<li><strong>为什么用模板匹配而不是 LLM？</strong> 模板匹配更稳定、轻量、可控–生产系统（操作工查检修周期）首要目标是”不出错”，2023 年初 LLM 还达不到这个可靠性。</li>
+<li><strong>为什么两部分模型不一样？</strong> CasRel 是从句子中”抽已有事实”建知识库；在线 NER 是从用户问题中”抽实体”去 KG 查答案，两者目标不同。</li>
+</ul>
+</blockquote>
+<h4 id="面试追问预演-1"><a href="#面试追问预演-1" class="headerlink" title="面试追问预演"></a>面试追问预演</h4><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>回答要点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CasRel 是什么？为什么选它？</td>
+<td>级联标注框架，把关系抽取转成两个序列标注任务（先标主体，再标客体），解决联合抽取中主体-客体配对组合爆炸的问题</td>
+</tr>
+<tr>
+<td>并查集在知识图谱里怎么用？</td>
+<td>实体归一化时，发现两个实体名指向同一事物就 union，最终每个等价类选一个代表名，图谱更干净</td>
+</tr>
+<tr>
+<td>用户问了模板库里没有的问题？</td>
+<td>模板匹配有置信度阈值，低于阈值回复”暂时无法回答”。这是模板系统的天然局限，后续可用 LLM 做意图理解+模板生成</td>
+</tr>
+<tr>
+<td>和现在 LLM 做 KBQA 比，优劣？</td>
+<td>优势：稳定、可解释、延迟低、不需要 GPU。劣势：模板覆盖有限。2025+ 用 LLM + Function Calling 转 Cypher 是更好方案，但 2023 年初 LLM 还没到能稳定做这件事的阶段</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="2-基于-AIGC-与私有-RAG-知识库的智能出行助手"><a href="#2-基于-AIGC-与私有-RAG-知识库的智能出行助手" class="headerlink" title="2. 基于 AIGC 与私有 RAG 知识库的智能出行助手"></a>2. 基于 AIGC 与私有 RAG 知识库的智能出行助手</h3><p><strong>2023.11 - 2024.04 | 软件创新大赛参赛项目</strong></p>
+<p><strong>一句话：</strong> 旅游垂直领域的 RAG 问答 + AIGC 交互，实现旅程规划、景点推荐、行程总结的智能化与个性化。</p>
+<p><strong>我做的：</strong></p>
+<ul>
+<li>搭建 RAG pipeline（LangChain + ChatGLM2-6B），实现旅游场景的问答与行程生成</li>
+<li>爬取携程笔记、小红书旅游笔记等数据，构建私有知识库（按目的地/主题分类索引）</li>
+<li>Prompt 工程调优，优化旅程规划、景点推荐、行程总结的输出质量</li>
+<li>探索 AIGC 在旅行场景的落地应用</li>
+</ul>
+<p><strong>核心功能：</strong></p>
+<ul>
+<li><strong>旅程规划：</strong> 根据用户偏好（时间/预算/兴趣）生成个性化行程</li>
+<li><strong>景点推荐：</strong> 基于 RAG 检索相似旅行笔记，结合用户画像做推荐</li>
+<li><strong>行程总结：</strong> 旅行结束后自动生成结构化总结</li>
+</ul>
+<p><strong>进行中：多模态旅游导游</strong></p>
+<ul>
+<li>结合旅途中的照片 + 简单初稿笔记 → 利用 AIGC 生成排版完善、可直接发布的旅行笔记（社区功能）</li>
+<li>多模态交互：支持图文混合输入，理解照片中的场景信息辅助推荐</li>
+</ul>
+<p><strong>可以升级的方向：</strong> 套 Agent 框架，接入天气查询、交通查询等 tools，从搜索工具升级为真正的”出行助理”。</p>
+<hr>
+<h2 id="四、我的-AI-Coding-实践"><a href="#四、我的-AI-Coding-实践" class="headerlink" title="四、我的 AI Coding 实践"></a>四、我的 AI Coding 实践</h2><h3 id="双-AI-助手模式"><a href="#双-AI-助手模式" class="headerlink" title="双 AI 助手模式"></a>双 AI 助手模式</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">需求 → Claude Code（编码主力）→ 读写文件 → 运行测试 → 迭代</span><br><span class="line">        ↗</span><br><span class="line">  Openclaw（分析/文档/自动化/查资料）</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><strong>Claude Code</strong>：主攻编码，任务级委托（”帮我实现 X 功能”），不是行级补全</li>
+<li><strong>Openclaw</strong>：文档、数据分析、格式化、网络搜索–不需要直接碰代码的活</li>
+<li>项目结束阶段：AI 做代码审查</li>
+</ul>
+<h3 id="沉淀积累"><a href="#沉淀积累" class="headerlink" title="沉淀积累"></a>沉淀积累</h3><ul>
+<li>可复用的 prompt 模板</li>
+<li>包装成自己的 skill</li>
+</ul>
+<h3 id="待补的坑"><a href="#待补的坑" class="headerlink" title="待补的坑"></a>待补的坑</h3><p>Multi-Agent 编排（Claude Code 背后可能包装了，但我还没真正用起来）。</p>
+<h3 id="研究流程-AI-化（中长期规划）"><a href="#研究流程-AI-化（中长期规划）" class="headerlink" title="研究流程 AI 化（中长期规划）"></a>研究流程 AI 化（中长期规划）</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">跑实验 → 看结果 → 分析 → 读论文 → 改进 → 再跑实验</span><br></pre></td></tr></table></figure></div>
+
+<p>这段流程里很多环节可以用 AI 加速，但目前还在探索怎么改。</p>
+<hr>
+<h2 id="附录：面试语录"><a href="#附录：面试语录" class="headerlink" title="附录：面试语录"></a>附录：面试语录</h2><blockquote>
+<p>“你可以项目没有那么大，也可以论文还没发，但你要能把自己做过的讲清楚。”</p>
+<p>“面试官想看你是不是’能把东西做出来并且知道怎么验证’的人。”</p>
+<p>“写简历上的项目，都得准备到输入是什么、输出是什么、流程是什么、验证怎么做、你自己到底改了什么。”</p>
+</blockquote>
+<hr>
+<p><em>以上均为个人真实经历。每个项目均能讲清楚”输入-输出-流程-验证-个人贡献”。准备充分，面试不慌</em></p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 旧经新练：实习 &amp; 项目篇</li>
+        <li><strong>Author:</strong> Ginkgo</li>
+        <li><strong>Created at
+                :</strong> 2026-04-24 21:32:20</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2026-04-26 21:32:33
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://g1nkgo7.github.io/2026/04/24/旧经新练-简历篇/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E9%9D%A2%E8%AF%95%E5%87%86%E5%A4%87/">#面试准备</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E9%A1%B9%E7%9B%AE%E5%A4%8D%E7%9B%98/">#项目复盘</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2026/04/25/%E6%97%A7%E7%BB%8F%E6%96%B0%E7%BB%83-%E9%9D%A2%E7%BB%8F%E7%AF%87/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">实习日记｜华为暑期实习 · 终端BG（AI应用方向）· 4月25日面经</span>
+						<span class="post-nav-item">Prev posts</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2026/04/24/%E6%97%A7%E7%BB%8F%E6%96%B0%E7%BB%83-RAG%E7%AF%87/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">旧经新练：RAG 篇</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="gitalk-container"></div>
+    <script data-swup-reload-script
+            src="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js"></script>
+    <script data-swup-reload-script>
+        (function() {
+            const startPath = location.pathname;
+            const startTime = Date.now();
+            const retryDelay = 200;
+            const retryLimit = 5000;
+
+            const runGitalk = () => {
+                if (location.pathname !== startPath) {
+                    return;
+                }
+
+                const container = document.getElementById('gitalk-container');
+                if (!container || typeof Gitalk === 'undefined') {
+                    if (Date.now() - startTime < retryLimit) {
+                        setTimeout(runGitalk, retryDelay);
+                    }
+                    return;
+                }
+
+                container.innerHTML = '';
+
+                let pageKey = decodeURI(location.pathname);
+                const maxLength = 50;
+                if (pageKey.length > maxLength) {
+                    pageKey = pageKey.substring(0, maxLength - 3) + '...';
+                }
+
+                try {
+                    new Gitalk({
+                        clientID: 'Ov23liQqIUZL7VlfwyIl',
+                        clientSecret: 'd5280a064abda06200c1597ac2085b2b6c9d35ff',
+                        repo: 'Gitalk',
+                        owner: 'G1nkgo7',
+                        admin: ['G1nkgo7'],
+                        id: pageKey,
+                        language: 'en',
+                        proxy: 'https://cors-server-ecru.vercel.app/github_access_token'
+                    }).render(container);
+                } catch (e) {
+                    window.Gitalk = null;
+                }
+            };
+
+            runGitalk();
+        })();
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">旧经新练：实习 &amp; 项目篇</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%9E%E4%B9%A0%E7%BB%8F%E5%8E%86"><span class="nav-text">一、实习经历</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%B5%AA%E6%BD%AE%E4%BF%A1%E6%81%AF-AI%E8%BD%AF%E4%BB%B6%E7%A0%94%E5%8F%91-%E6%97%A5%E5%B8%B8%E5%AE%9E%E4%B9%A0%E7%94%9F"><span class="nav-text">1. 浪潮信息 - AI软件研发 - 日常实习生</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%B8%AD%E7%83%9F%E5%88%9B%E6%96%B0-AI%E8%BD%AF%E4%BB%B6%E7%A0%94%E5%8F%91-%E6%97%A5%E5%B8%B8%E5%AE%9E%E4%B9%A0%E7%94%9F"><span class="nav-text">2. 中烟创新 - AI软件研发 - 日常实习生</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%A7%91%E7%A0%94%E7%BB%8F%E5%8E%86"><span class="nav-text">二、科研经历</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Future-Requirement-Issue-Localization%EF%BC%88%E5%8D%8E%E4%B8%BA%E5%90%88%E4%BD%9C%E7%A7%91%E7%A0%94%E6%80%A7%E9%A1%B9%E7%9B%AE%EF%BC%89"><span class="nav-text">1. Future_Requirement_Issue_Localization（华为合作科研性项目）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A4%9A%E6%A8%A1%E6%80%81%E7%A5%9E%E7%BB%8F%E6%9C%BA%E5%99%A8%E7%BF%BB%E8%AF%91%E7%BB%BC%E8%BF%B0"><span class="nav-text">2. 多模态神经机器翻译综述</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E9%A1%B9%E7%9B%AE%E7%BB%8F%E5%8E%86"><span class="nav-text">三、项目经历</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E4%BA%8E-Neo4j-%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E7%9A%84%E7%83%9F%E6%9C%BA-KBQA-%E7%B3%BB%E7%BB%9F"><span class="nav-text">1. 基于 Neo4j 知识图谱的烟机 KBQA 系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%9F%BA%E4%BA%8E-AIGC-%E4%B8%8E%E7%A7%81%E6%9C%89-RAG-%E7%9F%A5%E8%AF%86%E5%BA%93%E7%9A%84%E6%99%BA%E8%83%BD%E5%87%BA%E8%A1%8C%E5%8A%A9%E6%89%8B"><span class="nav-text">2. 基于 AIGC 与私有 RAG 知识库的智能出行助手</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%88%91%E7%9A%84-AI-Coding-%E5%AE%9E%E8%B7%B5"><span class="nav-text">四、我的 AI Coding 实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C-AI-%E5%8A%A9%E6%89%8B%E6%A8%A1%E5%BC%8F"><span class="nav-text">双 AI 助手模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B2%89%E6%B7%80%E7%A7%AF%E7%B4%AF"><span class="nav-text">沉淀积累</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%85%E8%A1%A5%E7%9A%84%E5%9D%91"><span class="nav-text">待补的坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A0%94%E7%A9%B6%E6%B5%81%E7%A8%8B-AI-%E5%8C%96%EF%BC%88%E4%B8%AD%E9%95%BF%E6%9C%9F%E8%A7%84%E5%88%92%EF%BC%89"><span class="nav-text">研究流程 AI 化（中长期规划）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A%E9%9D%A2%E8%AF%95%E8%AF%AD%E5%BD%95"><span class="nav-text">附录：面试语录</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Ginkgo</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        20 posts in total
+                    </span>
+                    
+                        <span>
+                            47.8k words in total
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.9.0</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+            
+                
+        
+                
+        
+                
+
+                    
+                        <script data-swup-reload-script>window.addEventListener("load",function(){setTimeout(function(){if(window.MathJax){MathJax.typesetPromise().catch(e=>console.log("MathJax error:",e))}},500)});document.addEventListener("swup:contentReplaced",function(){if(window.MathJax){MathJax.typesetPromise().catch(e=>console.log("MathJax error:",e))}})</script>
+                    
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container" role="dialog" aria-modal="true" aria-label="Image viewer">
+	<button class="image-viewer-close" type="button" aria-label="Close">
+		<i class="fa-solid fa-xmark"></i>
+	</button>
+	<button class="image-viewer-prev" type="button" aria-label="Prev">
+		<i class="fa-solid fa-chevron-left"></i>
+	</button>
+	<div class="image-viewer-frame">
+		<img src="" alt="">
+	</div>
+	<div class="image-viewer-exif-panel hidden absolute left-1/2 bottom-20 -translate-x-1/2 w-[min(92vw,420px)] max-h-[60vh] overflow-hidden rounded-2xl bg-background-color-transparent-80 p-4 text-left shadow-redefine-flat backdrop-blur-md" role="dialog" aria-label="EXIF" aria-hidden="true">
+		<div class="flex items-center justify-between mb-3">
+			<span class="text-sm font-semibold text-first-text-color">EXIF</span>
+			<button class="image-viewer-exif-close flex h-8 w-8 items-center justify-center rounded-full bg-background-color-transparent-80 text-first-text-color transition hover:bg-background-color-transparent-40" type="button" aria-label="Close">
+				<i class="fa-solid fa-xmark text-[0.65rem]"></i>
+			</button>
+		</div>
+		<div class="image-viewer-exif-cards grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1 scrollbar-hide"></div>
+		<template class="image-viewer-exif-card-template">
+			<div class="rounded-lg bg-background-color-transparent-40 px-3 py-2">
+				<div class="image-viewer-exif-card-header flex items-center gap-2 mb-1">
+					<i class="image-viewer-exif-card-icon fa-solid fa-circle-info text-xs text-third-text-color"></i>
+					<div class="image-viewer-exif-card-title text-xs font-semibold text-first-text-color"></div>
+				</div>
+				<div class="image-viewer-exif-card-items flex flex-col gap-1"></div>
+			</div>
+		</template>
+	</div>
+	<button class="image-viewer-exif-toggle flex items-center gap-2 hidden absolute left-1/2 bottom-6 -translate-x-1/2 rounded-full border border-border-color bg-background-color-transparent-80 px-4 py-2 text-first-text-color backdrop-blur-md transition hover:bg-background-color-transparent-40" type="button" aria-label="EXIF" aria-expanded="false">
+		<i class="fa-solid fa-circle-info text-xs"></i>
+		<span class="text-xs font-semibold uppercase tracking-wider">EXIF</span>
+	</button>
+	<button class="image-viewer-next" type="button" aria-label="Next">
+		<i class="fa-solid fa-chevron-right"></i>
+	</button>
+</div>
+
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Search..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    window.swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+
+    window.dispatchEvent(
+        new CustomEvent("redefine:swup:ready", {
+            detail: {
+                swup: window.swup,
+            },
+        }),
+    );
+</script>
+
+
+
+
+	
+<script src="/js/build/main.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/minimasonry.min.js" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+
+	
+	<div id="aplayer"></div>
+
+<script src="/js/build/libs/APlayer.min.js"></script>
+
+
+<script src="/js/build/plugins/aplayer.js"></script>
+
+
+	
+</body>
+
+</html>
